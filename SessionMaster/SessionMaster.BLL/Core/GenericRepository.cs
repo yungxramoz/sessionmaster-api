@@ -1,45 +1,61 @@
-﻿using SessionMaster.DAL.Entity;
+﻿using SessionMaster.DAL;
+using SessionMaster.DAL.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace SessionMaster.BLL.Core
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> 
+        where TEntity : BaseEntity
     {
-        public TEntity Add(TEntity entity)
+        protected readonly SessionMasterContext _context;
+
+        public GenericRepository(SessionMasterContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        
+        public void Add(TEntity entity)
+        {
+            _context.Set<TEntity>().Add(entity);
         }
 
-        public void Delete(TEntity entity)
+        public void Remove(TEntity entity)
         {
-            throw new NotImplementedException();
+            _context.Set<TEntity>().Remove(entity);
         }
 
-        public void Delete(Guid id)
+        public void Remove(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = GetById(id);
+            if (entity == null)
+            {
+                //TODO throw proper exception
+                throw new Exception("Entity not found");
+            }
+
+            _context.Set<TEntity>().Remove(entity);
         }
 
         public TEntity Find(Expression<Func<TEntity, bool>> expression)
         {
-            throw new NotImplementedException();
+            return _context.Set<TEntity>().Find(expression);
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Set<TEntity>();
         }
 
         public TEntity GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Set<TEntity>().Find(id);
         }
 
-        public TEntity Update(TEntity entity)
+        public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            _context.Set<TEntity>().Update(entity);
         }
     }
 }

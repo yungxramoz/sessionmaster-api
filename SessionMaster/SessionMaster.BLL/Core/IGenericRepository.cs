@@ -11,11 +11,11 @@ namespace SessionMaster.BLL.Core
         IEnumerable<TEntity> GetAll();
         TEntity Find(Expression<Func<TEntity, bool>> expression);
 
-        TEntity Add(TEntity entity);
+        void Add(TEntity entity);
 
-        TEntity Update(TEntity entity);
+        void Update(TEntity entity);
 
-        void Delete(TEntity entity);
-        void Delete(Guid id);
+        void Remove(TEntity entity);
+        void Remove(Guid id);
     }
 }

@@ -73,7 +73,7 @@ namespace SessionMaster.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            _repository.Delete(id);
+            _repository.Remove(id);
             _unitOfWork.Complete();
             return Ok();
         }
