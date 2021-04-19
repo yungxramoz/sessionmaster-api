@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SessionMaster.DAL;
 
 namespace SessionMaster.BLL.Core
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly SessionMasterContext _context;
+
+        public UnitOfWork(SessionMasterContext context)
+        {
+            _context = context;
+        }
+
         public int Complete()
         {
-            throw new NotImplementedException();
+            return _context.SaveChanges();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _context.Dispose();
         }
     }
 }
