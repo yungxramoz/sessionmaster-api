@@ -5,14 +5,14 @@ using System.Linq.Expressions;
 
 namespace SessionMaster.BLL.Core
 {
-    public class GenericRepository : IGenericRepository<BaseEntity>
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        public BaseEntity Add(BaseEntity entity)
+        public TEntity Add(TEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(BaseEntity entity)
+        public void Delete(TEntity entity)
         {
             throw new NotImplementedException();
         }
@@ -22,22 +22,22 @@ namespace SessionMaster.BLL.Core
             throw new NotImplementedException();
         }
 
-        public BaseEntity Find(Expression<Func<BaseEntity, bool>> expression)
+        public TEntity Find(Expression<Func<TEntity, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<BaseEntity> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public BaseEntity GetById(Guid id)
+        public TEntity GetById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public BaseEntity Update(BaseEntity entity)
+        public TEntity Update(TEntity entity)
         {
             throw new NotImplementedException();
         }
