@@ -8,4 +8,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SessionMaster.BLL\SessionMaster.BLL.csproj" />
+    <ProjectReference Include="..\SessionMaster.DAL\SessionMaster.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
