@@ -2,9 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>5aab2314-f0ae-4293-ad1e-fe757d1fc007</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -15,6 +20,12 @@
   <ItemGroup>
     <ProjectReference Include="..\SessionMaster.BLL\SessionMaster.BLL.csproj" />
     <ProjectReference Include="..\SessionMaster.DAL\SessionMaster.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ModBoardgame\" />
+    <Folder Include="ModSessionPlan\" />
+    <Folder Include="ModSession\" />
   </ItemGroup>
 
 </Project>
