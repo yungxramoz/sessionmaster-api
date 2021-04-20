@@ -1,9 +1,9 @@
 using System;
 using Xunit;
 
-namespace SessionMaster.UnitTests
+namespace SessionMaster.UnitTests.Domains.ModUser
 {
-    public class UnitTest1
+    public class UserRepositoryTest
     {
         [Fact]
         public void Test1()
