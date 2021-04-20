@@ -1,4 +1,5 @@
-﻿using SessionMaster.DAL;
+﻿using SessionMaster.BLL.ModUser;
+using SessionMaster.DAL;
 
 namespace SessionMaster.BLL.Core
 {
@@ -9,7 +10,10 @@ namespace SessionMaster.BLL.Core
         public UnitOfWork(SessionMasterContext context)
         {
             _context = context;
+            Users = new UserRepository(_context);
         }
+
+        public IUserRepository Users { get; private set; }
 
         public int Complete()
         {
