@@ -28,6 +28,7 @@ namespace SessionMaster.API
             services.AddApplication();
             services.AddInfrastructure(_configuration);
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
