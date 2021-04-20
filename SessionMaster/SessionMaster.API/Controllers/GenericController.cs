@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SessionMaster.BLL.Core;
-using SessionMaster.DAL.Entity;
+using SessionMaster.DAL.Entities;
 using System;
 
 namespace SessionMaster.API.Controllers
