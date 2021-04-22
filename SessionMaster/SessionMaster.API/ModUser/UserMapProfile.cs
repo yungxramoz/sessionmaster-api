@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SessionMaster.API.ModUser.ViewModels;
 using SessionMaster.DAL.Entities;
+using UserAuthentication.Models;
 
 namespace SessionMaster.API.ModUser
 {
@@ -9,6 +10,8 @@ namespace SessionMaster.API.ModUser
         public UserMapProfile()
         {
             CreateMap<User, UserModel>();
+            CreateMap<RegistrationModel, User>();
+            CreateMap<UpdateUserModel, User>();
         }
     }
 }
