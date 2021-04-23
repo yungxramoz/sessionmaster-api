@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SessionMaster.Common\SessionMaster.Common.csproj" />
+  </ItemGroup>
+
 </Project>

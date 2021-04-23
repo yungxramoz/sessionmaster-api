@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SessionMaster.Common\SessionMaster.Common.csproj" />
     <ProjectReference Include="..\SessionMaster.DAL\SessionMaster.DAL.csproj" />
   </ItemGroup>
 

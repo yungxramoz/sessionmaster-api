@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SessionMaster.BLL\SessionMaster.BLL.csproj" />
+    <ProjectReference Include="..\SessionMaster.Common\SessionMaster.Common.csproj" />
     <ProjectReference Include="..\SessionMaster.DAL\SessionMaster.DAL.csproj" />
   </ItemGroup>
 
