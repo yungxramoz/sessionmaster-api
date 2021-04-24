@@ -27,10 +27,6 @@ namespace SessionMaster.BLL.Core
         public virtual void Remove(Guid id)
         {
             var entity = GetById(id);
-            if (entity == null)
-            {
-                throw new NotFoundException("Entity not found");
-            }
 
             _context.Set<TEntity>().Remove(entity);
         }
@@ -47,11 +43,21 @@ namespace SessionMaster.BLL.Core
 
         public virtual TEntity GetById(Guid id)
         {
-            return _context.Set<TEntity>().Find(id);
+            var entity = _context.Set<TEntity>().Find(id);
+
+            if (entity == null)
+            {
+                throw new NotFoundException("Resource not found");
+            }
+
+            return entity;
         }
 
         public virtual TEntity Update(TEntity entity)
         {
+            //Validate if entity exists
+            GetById(entity.Id);
+
             _context.Set<TEntity>().Update(entity);
             return entity;
         }
