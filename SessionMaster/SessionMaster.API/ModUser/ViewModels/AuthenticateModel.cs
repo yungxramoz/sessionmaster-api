@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserAuthentication.Controllers
+namespace SessionMaster.API.ModUser.ViewModels
 {
     public class AuthenticateModel
     {
