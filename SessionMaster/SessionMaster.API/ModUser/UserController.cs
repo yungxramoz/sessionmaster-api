@@ -99,7 +99,7 @@ namespace SessionMaster.API.Controllers
 
                 //Create return model with token
                 var returnModel = _mapper.Map<UserModel>(user);
-                returnModel.Token = token
+                returnModel.Token = token;
                 return Ok(returnModel);
             }
             catch (InfoException ex)
@@ -158,9 +158,11 @@ namespace SessionMaster.API.Controllers
 
             try
             {
-                _unitOfWork.Users.Update(user, model.Password);
+                var userUpdated =_unitOfWork.Users.Update(user, model.Password);
                 _unitOfWork.Complete();
-                return Ok();
+
+                var returnModel = _mapper.Map<UserModel>(userUpdated);
+                return Ok(returnModel);
             }
             catch (InfoException e)
             {

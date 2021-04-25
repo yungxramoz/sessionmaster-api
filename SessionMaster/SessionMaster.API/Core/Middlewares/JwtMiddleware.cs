@@ -48,7 +48,7 @@ namespace SessionMaster.API.Core.Middlewares
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "unique_name").Value);
+                var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
                 context.Items["User"] = userRepository.GetById(userId);
