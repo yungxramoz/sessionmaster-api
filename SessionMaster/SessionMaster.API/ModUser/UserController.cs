@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SessionMaster.API.Core.Attributes;
 using SessionMaster.API.ModUser.ViewModels;
 using SessionMaster.BLL.Core;
 using SessionMaster.Common.Exceptions;
@@ -18,7 +18,6 @@ using UserAuthentication.Models;
 
 namespace SessionMaster.API.Controllers
 {
-    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
@@ -84,7 +83,6 @@ namespace SessionMaster.API.Controllers
         /// <returns>User with token on successful authenticate</returns>
         /// <response code="200">Successfully authenticated and returns token</response>
         /// <response code="400">Invalid credentials</response>
-        [AllowAnonymous]
         [HttpPost("authenticate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -100,8 +98,8 @@ namespace SessionMaster.API.Controllers
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
+                        new Claim(ClaimTypes.Name, user.Id.ToString())
+                    }),
                     Expires = DateTime.UtcNow.AddDays(7),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
@@ -128,7 +126,6 @@ namespace SessionMaster.API.Controllers
         /// <returns>Status if user has been successfully created</returns>
         /// <response code="200">Successfully registered the new user</response>
         /// <response code="400">Invalid registration data</response>
-        [AllowAnonymous]
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -159,6 +156,7 @@ namespace SessionMaster.API.Controllers
         /// <response code="400">Invalid update data as duplicate username</response>
         /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">User does not exist</response>
+        [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -193,6 +191,7 @@ namespace SessionMaster.API.Controllers
         /// <response code="200">Successfully deleted the user</response>
         /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">User does not exist</response>
+        [Authorize]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
