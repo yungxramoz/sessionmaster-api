@@ -5,7 +5,7 @@ using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
 using System;
 
-namespace SessionMaster.UnitTests.Domains.Core
+namespace SessionMaster.UnitTests.TestHelper
 {
     public static class SessionMasterContextHelper
     {

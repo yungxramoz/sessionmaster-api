@@ -3,7 +3,7 @@ using SessionMaster.Common.Exceptions;
 using SessionMaster.Common.Helpers;
 using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
-using SessionMaster.UnitTests.Domains.Core;
+using SessionMaster.UnitTests.TestHelper;
 using System;
 using System.Linq;
 using Xunit;
