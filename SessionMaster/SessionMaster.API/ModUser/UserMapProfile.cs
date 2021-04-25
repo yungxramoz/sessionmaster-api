@@ -9,6 +9,8 @@ namespace SessionMaster.API.ModUser
         public UserMapProfile()
         {
             CreateMap<User, UserModel>();
+            CreateMap<RegistrationModel, User>();
+            CreateMap<UpdateUserModel, User>();
         }
     }
 }

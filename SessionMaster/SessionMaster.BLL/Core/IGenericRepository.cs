@@ -9,13 +9,12 @@ namespace SessionMaster.BLL.Core
     {
         TEntity GetById(Guid id);
         IEnumerable<TEntity> GetAll();
-        TEntity Find(Expression<Func<TEntity, bool>> expression);
+        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> expression);
 
-        void Add(TEntity entity);
+        TEntity Add(TEntity entity);
 
-        void Update(TEntity entity);
+        TEntity Update(TEntity entity);
 
-        void Remove(TEntity entity);
         void Remove(Guid id);
     }
 }

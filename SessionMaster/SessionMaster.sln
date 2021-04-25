@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionMaster.API", "SessionMaster.API\SessionMaster.API.csproj", "{FB9BD17D-B750-480E-AA11-969EE5D259AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionMaster.API", "SessionMaster.API\SessionMaster.API.csproj", "{FB9BD17D-B750-480E-AA11-969EE5D259AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{430B066B-BB9E-492C-AC23-EE5C286ABB12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionMaster.UnitTests", "SessionMaster.UnitTests\SessionMaster.UnitTests.csproj", "{90D3AA0C-9D70-4E2C-8B9F-BDBD22E7ABA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionMaster.UnitTests", "SessionMaster.UnitTests\SessionMaster.UnitTests.csproj", "{90D3AA0C-9D70-4E2C-8B9F-BDBD22E7ABA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionMaster.BLL", "SessionMaster.BLL\SessionMaster.BLL.csproj", "{85D9C763-4AFA-4690-8495-9A558365EAFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionMaster.BLL", "SessionMaster.BLL\SessionMaster.BLL.csproj", "{85D9C763-4AFA-4690-8495-9A558365EAFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionMaster.DAL", "SessionMaster.DAL\SessionMaster.DAL.csproj", "{5E9663F1-D155-45AE-9052-2B24B8ECFDE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionMaster.DAL", "SessionMaster.DAL\SessionMaster.DAL.csproj", "{5E9663F1-D155-45AE-9052-2B24B8ECFDE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionMaster.Common", "SessionMaster.Common\SessionMaster.Common.csproj", "{C138E6A1-3D10-49E3-8474-DDD8131091D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{5E9663F1-D155-45AE-9052-2B24B8ECFDE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E9663F1-D155-45AE-9052-2B24B8ECFDE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E9663F1-D155-45AE-9052-2B24B8ECFDE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C138E6A1-3D10-49E3-8474-DDD8131091D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C138E6A1-3D10-49E3-8474-DDD8131091D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C138E6A1-3D10-49E3-8474-DDD8131091D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C138E6A1-3D10-49E3-8474-DDD8131091D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

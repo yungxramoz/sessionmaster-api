@@ -1,7 +1,9 @@
-﻿using SessionMaster.DAL;
+﻿using SessionMaster.Common.Exceptions;
+using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace SessionMaster.BLL.Core
@@ -16,46 +18,48 @@ namespace SessionMaster.BLL.Core
             _context = context;
         }
         
-        public void Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);
+            return entity;
         }
 
-        public void Remove(TEntity entity)
-        {
-            _context.Set<TEntity>().Remove(entity);
-        }
-
-        public void Remove(Guid id)
+        public virtual void Remove(Guid id)
         {
             var entity = GetById(id);
-            if (entity == null)
-            {
-                //TODO throw proper exception
-                throw new Exception("Entity not found");
-            }
 
             _context.Set<TEntity>().Remove(entity);
         }
 
-        public TEntity Find(Expression<Func<TEntity, bool>> expression)
+        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
         {
-            return _context.Set<TEntity>().Find(expression);
+            return _context.Set<TEntity>().Where(expression);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public virtual IEnumerable<TEntity> GetAll()
         {
             return _context.Set<TEntity>();
         }
 
-        public TEntity GetById(Guid id)
+        public virtual TEntity GetById(Guid id)
         {
-            return _context.Set<TEntity>().Find(id);
+            var entity = _context.Set<TEntity>().Find(id);
+
+            if (entity == null)
+            {
+                throw new NotFoundException("Resource not found");
+            }
+
+            return entity;
         }
 
-        public void Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
+            //Validate if entity exists
+            GetById(entity.Id);
+
             _context.Set<TEntity>().Update(entity);
+            return entity;
         }
     }
 }
