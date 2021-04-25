@@ -7,12 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SessionMaster.API.Core.Middlewares;
 using SessionMaster.BLL;
 using SessionMaster.BLL.ModUser;
 using SessionMaster.Common.Models;
 using SessionMaster.DAL;
-using SessionMaster.DAL.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -42,43 +43,6 @@ namespace SessionMaster.API
             //Appsettings
             var appSettingsSection = _configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
-            var appSettings = appSettingsSection.Get<AppSettings>();
-
-            //JWT
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        IUserRepository userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                        Guid userId = Guid.Parse(context.Principal.Identity.Name);
-                        User user = userRepository.GetById(userId);
-
-                        if (user == null)
-                        {
-                            context.Fail("Unauthorized");
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
-                x.RequireHttpsMetadata = true;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
 
             //Swagger
             services.AddSwaggerGen(c =>
@@ -95,6 +59,35 @@ namespace SessionMaster.API
                     },
                 });
 
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Bearer Authorization header.<br />
+                      Enter 'Bearer' [space] and then your token in the text input below. <br /> <br /> 
+                      <strong>Example: 'Bearer 12345abcdef'</strong><br /><br /> ",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                        Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                    }
+                });
 
                 //Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -117,7 +110,12 @@ namespace SessionMaster.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
@@ -128,8 +126,6 @@ namespace SessionMaster.API
             {
                 SessionMasterContext dbContext = serviceScope.ServiceProvider.GetRequiredService<SessionMasterContext>();
                 dbContext.Database.Migrate();
-
-                // TODO: Use dbContext if you want to do seeding etc.
             }
         }
     }
