@@ -7,6 +7,7 @@ using SessionMaster.API.Core.Attributes;
 using SessionMaster.API.ModUser.ViewModels;
 using SessionMaster.BLL.Core;
 using SessionMaster.Common.Exceptions;
+using SessionMaster.Common.Helpers;
 using SessionMaster.Common.Models;
 using SessionMaster.DAL.Entities;
 using System;
@@ -40,6 +41,7 @@ namespace SessionMaster.API.Controllers
         /// <returns>Get all users</returns>
         /// <response code="200">Returns all the users</response>
         /// <response code="401">Valid JWT token needed</response>
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -58,6 +60,7 @@ namespace SessionMaster.API.Controllers
         /// <response code="200">Returns the specific user</response>
         /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">User does not exist</response>
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -92,25 +95,11 @@ namespace SessionMaster.API.Controllers
             {
                 User user = _unitOfWork.Users.Authenticate(model.Username, model.Password);
 
-                //Generate token
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[] {
-                        new Claim(ClaimTypes.Name, user.Id.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
+                var token = JwtTokenHelper.GenerateJwtToken(user.Id.ToString(), _appSettings.Secret);
 
                 //Create return model with token
                 var returnModel = _mapper.Map<UserModel>(user);
-                returnModel.Token = tokenString;
-
+                returnModel.Token = token
                 return Ok(returnModel);
             }
             catch (InfoException ex)
