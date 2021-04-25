@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using SessionMaster.API.Core.Attributes;
 using SessionMaster.API.ModUser.ViewModels;
 using SessionMaster.BLL.Core;
@@ -12,11 +11,8 @@ using SessionMaster.Common.Models;
 using SessionMaster.DAL.Entities;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
-namespace SessionMaster.API.Controllers
+namespace SessionMaster.API.ModUser
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -157,7 +153,7 @@ namespace SessionMaster.API.Controllers
 
             try
             {
-                var userUpdated =_unitOfWork.Users.Update(user, model.Password);
+                var userUpdated = _unitOfWork.Users.Update(user, model.Password);
                 _unitOfWork.Complete();
 
                 var returnModel = _mapper.Map<UserModel>(userUpdated);
