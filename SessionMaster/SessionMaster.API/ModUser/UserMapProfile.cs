@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SessionMaster.API.ModUser.ViewModels;
 using SessionMaster.DAL.Entities;
-using UserAuthentication.Models;
 
 namespace SessionMaster.API.ModUser
 {

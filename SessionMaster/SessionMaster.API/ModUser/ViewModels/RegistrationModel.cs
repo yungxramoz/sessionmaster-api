@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserAuthentication.Models
+namespace SessionMaster.API.ModUser.ViewModels
 {
     public class RegistrationModel
     {

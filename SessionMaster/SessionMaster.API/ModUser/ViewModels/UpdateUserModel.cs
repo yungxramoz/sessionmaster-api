@@ -1,4 +1,4 @@
-﻿namespace UserAuthentication.Models
+﻿namespace SessionMaster.API.ModUser.ViewModels
 {
     public class UpdateUserModel
     {
