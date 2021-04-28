@@ -13,6 +13,7 @@ namespace SessionMaster.DAL
     public class SessionMasterContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<UserBoardGame> UserBoardGames { get; set; }
 
         public SessionMasterContext(DbContextOptions<SessionMasterContext> options)
             :base(options)
@@ -23,6 +24,7 @@ namespace SessionMaster.DAL
         {
             // apply configurations
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserBoardGameConfiguration());
         }
     }
 }
