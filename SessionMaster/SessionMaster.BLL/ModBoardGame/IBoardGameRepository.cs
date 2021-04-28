@@ -7,6 +7,7 @@ namespace SessionMaster.BLL.ModBoardGame
     public interface IBoardGameRepository
     {
         Task<BoardGameAtlasGameDetails> GetById(string id, string clientId);
+
         Task<List<BoardGameAtlasGameDetails>> GetAll(string filter, string clientId);
     }
 }

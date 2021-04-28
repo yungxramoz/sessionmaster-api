@@ -4,12 +4,12 @@ using System;
 
 namespace SessionMaster.BLL.Core
 {
-    public interface IUnitOfWork: IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         //repositories
         IUserRepository Users { get; }
-        IBoardGameRepository BoardGames { get; }
 
+        IBoardGameRepository BoardGames { get; }
 
         //others
         int Complete();

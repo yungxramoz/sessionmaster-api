@@ -56,12 +56,10 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             [Fact]
             public void WrongPassword_ThrowsException()
             {
-
                 //Arrange
                 var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 context.AddUser("Julius", "Testimus", "tester", "test");
-
 
                 //Assert & Act
                 Assert.Throws<InfoException>(() => sut.Authenticate("tester", "TEST"));
@@ -95,7 +93,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 };
 
                 //Act
-                var result =sut.Add(user, "test");
+                var result = sut.Add(user, "test");
 
                 //Assert
                 Assert.NotNull(result);

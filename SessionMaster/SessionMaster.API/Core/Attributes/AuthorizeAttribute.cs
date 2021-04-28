@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SessionMaster.DAL.Entities;
 using System;
-using System.Linq;
 
 namespace SessionMaster.API.Core.Attributes
 {

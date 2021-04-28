@@ -8,10 +8,12 @@ namespace SessionMaster.Common.Helpers
         {
             return $"&max_player={maxPlayer}";
         }
+
         public static string ByName(string name)
         {
             return $"&name={name}";
         }
+
         public static string ByIds(List<string> ids)
         {
             return $"&ids={string.Join(",", ids)}";

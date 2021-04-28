@@ -79,7 +79,7 @@ namespace SessionMaster.API.ModBoardGame
                 var model = _mapper.Map<BoardGameModel>(boardGame);
                 return Ok(boardGame);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
             }

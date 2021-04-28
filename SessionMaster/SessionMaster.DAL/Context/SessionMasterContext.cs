@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SessionMaster.DAL.Configurations;
 using SessionMaster.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SessionMaster.DAL
 {
@@ -16,7 +10,7 @@ namespace SessionMaster.DAL
         public DbSet<UserBoardGame> UserBoardGames { get; set; }
 
         public SessionMasterContext(DbContextOptions<SessionMasterContext> options)
-            :base(options)
+            : base(options)
         {
         }
 

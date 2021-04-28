@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace SessionMaster.BLL.Core
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> 
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : BaseEntity
     {
         protected readonly SessionMasterContext _context;
@@ -17,7 +17,7 @@ namespace SessionMaster.BLL.Core
         {
             _context = context;
         }
-        
+
         public virtual TEntity Add(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);

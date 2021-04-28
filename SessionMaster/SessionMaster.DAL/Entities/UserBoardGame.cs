@@ -16,4 +16,4 @@ namespace SessionMaster.DAL.Entities
         [ForeignKey("Id")]
         public User User { get; set; }
     }
-}   
+}

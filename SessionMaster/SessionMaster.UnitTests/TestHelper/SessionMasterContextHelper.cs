@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SessionMaster.Common.Helpers;
 using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
@@ -16,6 +15,7 @@ namespace SessionMaster.UnitTests.TestHelper
                 .Options;
 
         #region User Test Helper
+
         public static User AddUser(this SessionMasterContext context, string firstname, string lastname, string username, string password)
         {
             PasswordHelper.CreatePasswordHash(password, out var passwordHasch, out var passwordSalt);
@@ -36,6 +36,7 @@ namespace SessionMaster.UnitTests.TestHelper
 
             return user;
         }
-        #endregion
+
+        #endregion User Test Helper
     }
 }

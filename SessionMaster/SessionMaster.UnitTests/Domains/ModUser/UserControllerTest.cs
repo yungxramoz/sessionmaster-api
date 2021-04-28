@@ -48,7 +48,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                     new UserModel
                     {
                         Id = Guid.NewGuid()
-                    } 
+                    }
                 };
 
                 _unitOfWork.Setup(uow => uow.Users.GetAll()).Returns(userList);
@@ -191,7 +191,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 //Assert
                 Assert.IsType<OkResult>(result);
             }
-            
+
             [Fact]
             public void InfoException_ReturnsBadRequest400()
             {

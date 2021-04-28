@@ -1,23 +1,18 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SessionMaster.API.Core.Middlewares;
 using SessionMaster.BLL;
-using SessionMaster.BLL.ModUser;
 using SessionMaster.Common.Models;
 using SessionMaster.DAL;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SessionMaster.API
 {
@@ -62,7 +57,7 @@ namespace SessionMaster.API
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Bearer Authorization header.<br />
-                      Enter 'Bearer' [space] and then your token in the text input below. <br /> <br /> 
+                      Enter 'Bearer' [space] and then your token in the text input below. <br /> <br />
                       <strong>Example: 'Bearer 12345abcdef'</strong><br /><br /> ",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
@@ -83,7 +78,6 @@ namespace SessionMaster.API
                             Scheme = "oauth2",
                             Name = "Bearer",
                             In = ParameterLocation.Header,
-
                         },
                         new List<string>()
                     }
