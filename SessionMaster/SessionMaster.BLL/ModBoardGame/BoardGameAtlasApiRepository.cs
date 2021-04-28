@@ -49,7 +49,7 @@ namespace SessionMaster.BLL.ModBoardGame
 
         public async Task<List<BoardGameAtlasGameDetails>> GetAll(string filter, string clientId)
         {
-            var client = new RestClient($"{BASE_URL}/search?client_id={clientId}{FIELDS}{filter}&order_by=popularity");
+            var client = new RestClient($"{BASE_URL}/search?client_id={clientId}{FIELDS}{filter}&order_by=popularity&limit=100");
             var request = new RestRequest(Method.GET);
 
             try
