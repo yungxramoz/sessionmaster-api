@@ -1,4 +1,5 @@
-﻿using SessionMaster.BLL.ModUser;
+﻿using SessionMaster.BLL.ModBoardGame;
+using SessionMaster.BLL.ModUser;
 using SessionMaster.DAL;
 
 namespace SessionMaster.BLL.Core
@@ -8,11 +9,13 @@ namespace SessionMaster.BLL.Core
         private readonly SessionMasterContext _context;
 
         public IUserRepository Users { get; private set; }
+        public IBoardGameRepository BoardGames { get; private set; }
 
-        public UnitOfWork(SessionMasterContext context)
+        public UnitOfWork(SessionMasterContext context, IUserRepository users, IBoardGameRepository boardGames)
         {
             _context = context;
-            Users = new UserRepository(_context);
+            Users = users;
+            BoardGames = boardGames;
         }
 
         public int Complete()

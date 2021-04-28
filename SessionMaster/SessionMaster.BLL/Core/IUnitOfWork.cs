@@ -1,4 +1,5 @@
-﻿using SessionMaster.BLL.ModUser;
+﻿using SessionMaster.BLL.ModBoardGame;
+using SessionMaster.BLL.ModUser;
 using System;
 
 namespace SessionMaster.BLL.Core
@@ -7,6 +8,7 @@ namespace SessionMaster.BLL.Core
     {
         //repositories
         IUserRepository Users { get; }
+        IBoardGameRepository BoardGames { get; }
 
 
         //others
