@@ -11,7 +11,7 @@ namespace SessionMaster.Common.Helpers
 
         public static string ByName(string name)
         {
-            return $"&name={name}";
+            return string.IsNullOrWhiteSpace(name) ? "" : $"&name={name}";
         }
 
         public static string ByIds(List<string> ids)

@@ -34,16 +34,16 @@ namespace SessionMaster.API.ModBoardGame
         }
 
         /// <summary>
-        /// Get board games by a name filter
+        /// Get board games filtered
         /// </summary>
         /// <param name="name">The name of the board game</param>
-        /// <returns>Filtered board games</returns>
+        /// <returns>Board games matching the filter</returns>
         /// <response code="200">Successfully retrieved the filtered board games</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
-        [HttpGet("search/{name}")]
+        [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GeByName(string name)
+        public async Task<IActionResult> GetFiltered(string name = "")
         {
             try
             {
