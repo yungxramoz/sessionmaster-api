@@ -20,7 +20,7 @@ namespace SessionMaster.BLL.ModUser
                 throw new InfoException("Username and password is required");
             }
 
-            User user = Find(u => u.Username == username).FirstOrDefault();
+            User user = Get(u => u.Username == username).FirstOrDefault();
 
             if (user == null)
             {
