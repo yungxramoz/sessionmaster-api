@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace SessionMaster.API.ModUser
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
