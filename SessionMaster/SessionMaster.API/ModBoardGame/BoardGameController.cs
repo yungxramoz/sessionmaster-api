@@ -40,7 +40,7 @@ namespace SessionMaster.API.ModBoardGame
         /// <returns>Board games matching the filter</returns>
         /// <response code="200">Successfully retrieved the filtered board games</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFiltered(string name = "")
@@ -76,7 +76,7 @@ namespace SessionMaster.API.ModBoardGame
             {
                 var boardGame = await _unitOfWork.BoardGames.GetById(id, _appSettings.BgaClientId);
                 var model = _mapper.Map<BoardGameModel>(boardGame);
-                return Ok(boardGame);
+                return Ok(model);
             }
             catch (NotFoundException ex)
             {
