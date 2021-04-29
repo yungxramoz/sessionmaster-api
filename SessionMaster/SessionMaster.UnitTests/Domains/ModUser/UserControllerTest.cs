@@ -76,7 +76,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                     Id = Guid.NewGuid()
                 };
 
-                _unitOfWork.Setup(uow => uow.Users.GetById(user.Id)).Returns(user);
+                _unitOfWork.Setup(uow => uow.Users.GetById(user.Id, null)).Returns(user);
                 _mapper.Setup(m => m.Map<UserModel>(user)).Returns(userModel);
                 var sut = new UserController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 
@@ -94,7 +94,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 //Arrange
                 var exception = new NotFoundException("test");
 
-                _unitOfWork.Setup(uow => uow.Users.GetById(It.IsAny<Guid>())).Throws(exception);
+                _unitOfWork.Setup(uow => uow.Users.GetById(It.IsAny<Guid>(), null)).Throws(exception);
                 var sut = new UserController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 
                 //Act
