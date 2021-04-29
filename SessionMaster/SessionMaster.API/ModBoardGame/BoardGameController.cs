@@ -107,7 +107,7 @@ namespace SessionMaster.API.ModBoardGame
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByUser(Guid id)
+        public async Task<IActionResult> GetCollection(Guid id)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace SessionMaster.API.ModBoardGame
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Post(Guid id, [FromForm] string boardGameId)
+        public async Task<IActionResult> PostToCollection(Guid id, [FromForm] string boardGameId)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace SessionMaster.API.ModBoardGame
                     return BadRequest("The board game is already in the collection");
                 }
 
-                return await GetByUser(id);
+                return await GetCollection(id);
             }
             catch (NotFoundException ex)
             {
@@ -202,7 +202,7 @@ namespace SessionMaster.API.ModBoardGame
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid id, [FromForm] string boardGameId)
+        public async Task<IActionResult> DeleteFromCollection(Guid id, [FromForm] string boardGameId)
         {
             try
             {
@@ -227,7 +227,7 @@ namespace SessionMaster.API.ModBoardGame
                     return BadRequest("The board game is already in the collection");
                 }
 
-                return await GetByUser(id);
+                return await GetCollection(id);
             }
             catch (NotFoundException ex)
             {
