@@ -58,6 +58,7 @@ namespace SessionMaster.DAL.Migrations
             modelBuilder.Entity("SessionMaster.DAL.Entities.UserBoardGame", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BoardGameId")
@@ -79,12 +80,17 @@ namespace SessionMaster.DAL.Migrations
             modelBuilder.Entity("SessionMaster.DAL.Entities.UserBoardGame", b =>
                 {
                     b.HasOne("SessionMaster.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                        .WithMany("BoardGames")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SessionMaster.DAL.Entities.User", b =>
+                {
+                    b.Navigation("BoardGames");
                 });
 #pragma warning restore 612, 618
         }

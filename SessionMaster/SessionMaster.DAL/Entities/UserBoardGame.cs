@@ -13,7 +13,8 @@ namespace SessionMaster.DAL.Entities
         [StringLength(255)]
         public string BoardGameId { get; set; }
 
-        [ForeignKey("Id")]
+        [Required]
+        [ForeignKey("UserId")]
         public User User { get; set; }
     }
 }

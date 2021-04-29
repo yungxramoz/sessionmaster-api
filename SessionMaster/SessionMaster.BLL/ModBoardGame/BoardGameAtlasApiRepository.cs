@@ -1,5 +1,7 @@
 ﻿using RestSharp;
+using SessionMaster.BLL.Core;
 using SessionMaster.Common.Exceptions;
+using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,14 @@ using System.Threading.Tasks;
 
 namespace SessionMaster.BLL.ModBoardGame
 {
-    public class BoardGameAtlasApiRepository : IBoardGameRepository
+    public class BoardGameAtlasApiRepository : GenericRepository<UserBoardGame>, IBoardGameRepository
     {
         public const string BASE_URL = "https://api.boardgameatlas.com/api";
         public const string FIELDS = "&fields=id,name,year_published,min_players,max_players,min_playtime,max_playtime,description,thumb_url,image_url";
+
+        public BoardGameAtlasApiRepository(SessionMasterContext context) : base(context)
+        {
+        }
 
         public async Task<BoardGameAtlasGameDetails> GetById(string id, string clientId)
         {

@@ -1,19 +1,24 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SessionMaster.API.Core.Attributes;
 using SessionMaster.API.ModBoardGame.ViewModels;
 using SessionMaster.BLL.Core;
 using SessionMaster.Common.Exceptions;
 using SessionMaster.Common.Helpers;
 using SessionMaster.Common.Models;
+using SessionMaster.DAL.Entities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SessionMaster.API.ModBoardGame
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/boardgames")]
     [ApiController]
     public class BoardGameController : ControllerBase
     {
@@ -36,7 +41,6 @@ namespace SessionMaster.API.ModBoardGame
         /// <response code="200">Returns all boardgames found by name (max. 25)</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
         /// <response code="401">Valid JWT token needed</response>
-        //[Authorize]
         [HttpGet("search/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -65,7 +69,6 @@ namespace SessionMaster.API.ModBoardGame
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
         /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">Board game with the given id not found</response>
-        //[Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,6 +81,153 @@ namespace SessionMaster.API.ModBoardGame
                 var boardGame = await _unitOfWork.BoardGames.GetById(id, _appSettings.BgaClientId);
                 var model = _mapper.Map<BoardGameModel>(boardGame);
                 return Ok(boardGame);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InfoException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the board game collection of a specific user
+        /// </summary>
+        /// <param name="id">The id of the user whose board game collection to retrieve</param>
+        /// <returns>Filtered board games</returns>
+        /// <response code="200">Returns the boardmaes in the collection</response>
+        /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
+        /// <response code="401">Valid JWT token needed</response>
+        /// <response code="404">User not found</response>
+        [Authorize]
+        [HttpGet("~/api/users/{id}/boardgames")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByUser(Guid id)
+        {
+            try
+            {
+                var user = _unitOfWork.Users.GetById(id, u => u.Include(u => u.BoardGames));
+
+                if (user.BoardGames == null)
+                {
+                    return Ok();
+                }
+
+                var boardgameIds = user.BoardGames.Select(bg => bg.BoardGameId).ToList();
+                var boardGames = await _unitOfWork.BoardGames.GetAll(BoardGameAtlasFilterHelper.ByIds(boardgameIds), _appSettings.BgaClientId);
+                var model = _mapper.Map<IList<BoardGameModel>>(boardGames);
+                return Ok(model);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InfoException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Add a board game to a users collection
+        /// </summary>
+        /// <param name="id">The id of the user whose board game collection to extend</param>
+        /// <param name="boardGameId">The id of the board game to add to the collection</param>
+        /// <returns>Complete Collection</returns>
+        /// <response code="200">Successfully added the board game to the users collection</response>
+        /// <response code="400">An error occured either on the tirdparty api or the db action</response>
+        /// <response code="401">Valid JWT token needed</response>
+        /// <response code="404">Board game or user not found</response>
+        [Authorize]
+        [HttpPost("~/api/users/{id}/boardgames")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Post(Guid id, [FromForm] string boardGameId)
+        {
+            try
+            {
+                //verify that user and boardgame exists
+                var user = _unitOfWork.Users.GetById(id);
+                var boardGame = await _unitOfWork.BoardGames.GetById(boardGameId, _appSettings.BgaClientId);
+
+                var addModel = new UserBoardGame
+                {
+                    UserId = user.Id,
+                    BoardGameId = boardGame.Id
+                };
+
+                _unitOfWork.BoardGames.Add(addModel);
+
+                try
+                {
+                    _unitOfWork.Complete();
+                }
+                catch (DbUpdateException ex)
+                {
+                    return BadRequest("The board game is already in the collection");
+                }
+
+                return await GetByUser(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InfoException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete a board game form a users collection
+        /// </summary>
+        /// <param name="id">The id of the user, whose board game gets removed</param>
+        /// <param name="boardGameId">The id of the board game to remove from the collection</param>
+        /// <returns>Complete Collection</returns>
+        /// <response code="200">Successfully removed the board game from the users collection</response>
+        /// <response code="400">An error occured either on the tirdparty api or the db action</response>
+        /// <response code="401">Valid JWT token needed</response>
+        /// <response code="404">Board game or user not found</response>
+        [Authorize]
+        [HttpDelete("~/api/users/{id}/boardgames")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(Guid id, [FromForm] string boardGameId)
+        {
+            try
+            {
+                //verify that user exists
+                var user = _unitOfWork.Users.GetById(id);
+
+                var boardgameToRemove = _unitOfWork.BoardGames.Get(e => e.BoardGameId == boardGameId && e.UserId == id).SingleOrDefault();
+
+                if (boardgameToRemove == null)
+                {
+                    throw new NotFoundException("Board game is not in the collection");
+                }
+
+                _unitOfWork.BoardGames.Remove(boardgameToRemove.Id);
+
+                try
+                {
+                    _unitOfWork.Complete();
+                }
+                catch (DbUpdateException ex)
+                {
+                    return BadRequest("The board game is already in the collection");
+                }
+
+                return await GetByUser(id);
             }
             catch (NotFoundException ex)
             {

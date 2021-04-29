@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SessionMaster.DAL.Migrations
 {
@@ -19,8 +19,8 @@ namespace SessionMaster.DAL.Migrations
                 {
                     table.PrimaryKey("PK_UserBoardGame", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserBoardGame_User_Id",
-                        column: x => x.Id,
+                        name: "FK_UserBoardGame_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

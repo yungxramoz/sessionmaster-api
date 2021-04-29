@@ -10,7 +10,7 @@ using SessionMaster.DAL;
 namespace SessionMaster.DAL.Migrations
 {
     [DbContext(typeof(SessionMasterContext))]
-    [Migration("20210428223951_CreateUserBoardGame")]
+    [Migration("20210429172945_CreateUserBoardGame")]
     partial class CreateUserBoardGame
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,7 @@ namespace SessionMaster.DAL.Migrations
             modelBuilder.Entity("SessionMaster.DAL.Entities.UserBoardGame", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BoardGameId")
@@ -81,12 +82,17 @@ namespace SessionMaster.DAL.Migrations
             modelBuilder.Entity("SessionMaster.DAL.Entities.UserBoardGame", b =>
                 {
                     b.HasOne("SessionMaster.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                        .WithMany("BoardGames")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SessionMaster.DAL.Entities.User", b =>
+                {
+                    b.Navigation("BoardGames");
                 });
 #pragma warning restore 612, 618
         }
