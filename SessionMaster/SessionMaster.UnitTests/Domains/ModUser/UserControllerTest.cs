@@ -51,7 +51,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                     }
                 };
 
-                _unitOfWork.Setup(uow => uow.Users.GetAll()).Returns(userList);
+                _unitOfWork.Setup(uow => uow.Users.Get(null, null, null)).Returns(userList);
                 _mapper.Setup(m => m.Map<IList<UserModel>>(It.IsAny<List<User>>())).Returns(userModelList);
                 var sut = new UserController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 

@@ -183,7 +183,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
                 //Act
-                var result = sut.Find(u => u.Firstname == "Julius").FirstOrDefault();
+                var result = sut.Get(u => u.Firstname == "Julius").FirstOrDefault();
 
                 //Assert
                 Assert.Same(user, result);
@@ -198,7 +198,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
                 //Act
-                var result = sut.Find(u => u.Firstname == "Julius" && u.Username == "tester").FirstOrDefault();
+                var result = sut.Get(u => u.Firstname == "Julius" && u.Username == "tester").FirstOrDefault();
 
                 //Assert
                 Assert.Same(user, result);
@@ -214,7 +214,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 var user2 = context.AddUser("Markus", "Testimus", "tester2", "test2");
 
                 //Act
-                var result = sut.Find(u => u.Lastname == "Testimus");
+                var result = sut.Get(u => u.Lastname == "Testimus");
 
                 //Assert
                 Assert.Contains(user1, result);
@@ -234,7 +234,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 var user2 = context.AddUser("Markus", "Testimus", "tester2", "test2");
 
                 //Act
-                var result = sut.GetAll();
+                var result = sut.Get();
 
                 //Assert
                 Assert.Contains(user1, result);
@@ -249,7 +249,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 var sut = new UserRepository(context);
 
                 //Act
-                var result = sut.GetAll();
+                var result = sut.Get();
 
                 //Assert
                 Assert.Empty(result);

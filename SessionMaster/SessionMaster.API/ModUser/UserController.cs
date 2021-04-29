@@ -42,7 +42,7 @@ namespace SessionMaster.API.ModUser
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Get()
         {
-            var users = _unitOfWork.Users.GetAll();
+            var users = _unitOfWork.Users.Get();
             var model = _mapper.Map<IList<UserModel>>(users);
             return Ok(model);
         }

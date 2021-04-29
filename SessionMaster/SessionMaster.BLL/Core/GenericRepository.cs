@@ -1,4 +1,6 @@
-﻿using SessionMaster.Common.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using SessionMaster.Common.Exceptions;
 using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
 using System;
@@ -12,15 +14,17 @@ namespace SessionMaster.BLL.Core
         where TEntity : BaseEntity
     {
         protected readonly SessionMasterContext _context;
+        internal DbSet<TEntity> _dbSet;
 
         public GenericRepository(SessionMasterContext context)
         {
             _context = context;
+            _dbSet = context.Set<TEntity>();
         }
 
         public virtual TEntity Add(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
+            _dbSet.Add(entity);
             return entity;
         }
 
@@ -31,19 +35,9 @@ namespace SessionMaster.BLL.Core
             _context.Set<TEntity>().Remove(entity);
         }
 
-        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
-        {
-            return _context.Set<TEntity>().Where(expression);
-        }
-
-        public virtual IEnumerable<TEntity> GetAll()
-        {
-            return _context.Set<TEntity>();
-        }
-
         public virtual TEntity GetById(Guid id)
         {
-            var entity = _context.Set<TEntity>().Find(id);
+            var entity = _dbSet.Find(id);
 
             if (entity == null)
             {
@@ -53,12 +47,38 @@ namespace SessionMaster.BLL.Core
             return entity;
         }
 
+        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (include != null)
+            {
+                //funktioniert für Include und ThenInclude
+                query = include(query);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                return query.ToList();
+            }
+        }
+
         public virtual TEntity Update(TEntity entity)
         {
             //Validate if entity exists
             GetById(entity.Id);
 
-            _context.Set<TEntity>().Update(entity);
+            _dbSet.Update(entity);
             return entity;
         }
     }
