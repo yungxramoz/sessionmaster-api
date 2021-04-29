@@ -35,9 +35,17 @@ namespace SessionMaster.BLL.Core
             _context.Set<TEntity>().Remove(entity);
         }
 
-        public virtual TEntity GetById(Guid id)
+        public virtual TEntity GetById(Guid id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
-            var entity = _dbSet.Find(id);
+            IQueryable<TEntity> query = _dbSet;
+
+            if (include != null)
+            {
+                //works for Include and ThenInclude
+                query = include(query);
+            }
+
+            var entity = query.SingleOrDefault(e => e.Id == id);
 
             if (entity == null)
             {
@@ -59,7 +67,7 @@ namespace SessionMaster.BLL.Core
 
             if (include != null)
             {
-                //funktioniert für Include und ThenInclude
+                //works for Include and ThenInclude
                 query = include(query);
             }
 
