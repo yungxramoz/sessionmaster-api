@@ -36,15 +36,13 @@ namespace SessionMaster.API.ModBoardGame
         /// <summary>
         /// Get board games by a name filter
         /// </summary>
-        /// <param name="name">The name of the boardgame</param>
+        /// <param name="name">The name of the board game</param>
         /// <returns>Filtered board games</returns>
-        /// <response code="200">Returns all boardgames found by name (max. 25)</response>
+        /// <response code="200">Successfully retrieved the filtered board games</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
-        /// <response code="401">Valid JWT token needed</response>
         [HttpGet("search/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GeByName(string name)
         {
             try
@@ -63,16 +61,14 @@ namespace SessionMaster.API.ModBoardGame
         /// <summary>
         /// Get a specific board game
         /// </summary>
-        /// <param name="id">The id of the board gamer</param>
+        /// <param name="id">The id of the board game</param>
         /// <returns>The requested board game details</returns>
-        /// <response code="200">Returns the specific board game</response>
+        /// <response code="200">Successfully retrieved the board game</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
-        /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">Board game with the given id not found</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(string id)
         {
@@ -97,7 +93,7 @@ namespace SessionMaster.API.ModBoardGame
         /// </summary>
         /// <param name="id">The id of the user whose board game collection to retrieve</param>
         /// <returns>Filtered board games</returns>
-        /// <response code="200">Returns the boardmaes in the collection</response>
+        /// <response code="200">Successfully retrieved the users board game collection</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
         /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">User not found</response>
