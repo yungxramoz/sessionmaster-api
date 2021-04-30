@@ -6,7 +6,7 @@ using System;
 
 namespace SessionMaster.UnitTests.TestHelper
 {
-    public static class SessionMasterContextHelper
+    public static class SessionMasterContextTestHelper
     {
         //New Instance for every test, so they don't share the same context
         public static DbContextOptions<SessionMasterContext> ContextOptions
