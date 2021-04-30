@@ -22,10 +22,5 @@ jobs:
       run: dotnet restore ./SessionMaster
     - name: 🔨 Build
       run: dotnet build ./SessionMaster --no-restore
-      
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
     - name: 🧪 Test
       run: dotnet test ./SessionMaster --no-build --verbosity normal
