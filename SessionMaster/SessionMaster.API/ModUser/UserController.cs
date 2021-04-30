@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace SessionMaster.API.ModUser
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -42,7 +42,7 @@ namespace SessionMaster.API.ModUser
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Get()
         {
-            var users = _unitOfWork.Users.GetAll();
+            var users = _unitOfWork.Users.Get();
             var model = _mapper.Map<IList<UserModel>>(users);
             return Ok(model);
         }

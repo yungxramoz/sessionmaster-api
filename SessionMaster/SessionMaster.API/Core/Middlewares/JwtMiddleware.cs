@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using SessionMaster.BLL.ModUser;
 using SessionMaster.Common.Models;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;

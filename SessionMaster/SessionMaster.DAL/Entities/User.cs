@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SessionMaster.DAL.Entities
 {
@@ -23,5 +24,7 @@ namespace SessionMaster.DAL.Entities
         [Required]
         [StringLength(128)]
         public byte[] PasswordSalt { get; set; }
+
+        public ICollection<UserBoardGame> BoardGames { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using SessionMaster.Common.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using SessionMaster.Common.Exceptions;
 using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
 using System;
@@ -8,19 +10,21 @@ using System.Linq.Expressions;
 
 namespace SessionMaster.BLL.Core
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> 
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : BaseEntity
     {
         protected readonly SessionMasterContext _context;
+        internal DbSet<TEntity> _dbSet;
 
         public GenericRepository(SessionMasterContext context)
         {
             _context = context;
+            _dbSet = context.Set<TEntity>();
         }
-        
+
         public virtual TEntity Add(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
+            _dbSet.Add(entity);
             return entity;
         }
 
@@ -31,19 +35,17 @@ namespace SessionMaster.BLL.Core
             _context.Set<TEntity>().Remove(entity);
         }
 
-        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
+        public virtual TEntity GetById(Guid id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
-            return _context.Set<TEntity>().Where(expression);
-        }
+            IQueryable<TEntity> query = _dbSet;
 
-        public virtual IEnumerable<TEntity> GetAll()
-        {
-            return _context.Set<TEntity>();
-        }
+            if (include != null)
+            {
+                //works for Include and ThenInclude
+                query = include(query);
+            }
 
-        public virtual TEntity GetById(Guid id)
-        {
-            var entity = _context.Set<TEntity>().Find(id);
+            var entity = query.SingleOrDefault(e => e.Id == id);
 
             if (entity == null)
             {
@@ -53,12 +55,38 @@ namespace SessionMaster.BLL.Core
             return entity;
         }
 
+        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (include != null)
+            {
+                //works for Include and ThenInclude
+                query = include(query);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                return query.ToList();
+            }
+        }
+
         public virtual TEntity Update(TEntity entity)
         {
             //Validate if entity exists
             GetById(entity.Id);
 
-            _context.Set<TEntity>().Update(entity);
+            _dbSet.Update(entity);
             return entity;
         }
     }

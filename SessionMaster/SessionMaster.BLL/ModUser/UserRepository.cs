@@ -3,7 +3,6 @@ using SessionMaster.Common.Exceptions;
 using SessionMaster.Common.Helpers;
 using SessionMaster.DAL;
 using SessionMaster.DAL.Entities;
-using System;
 using System.Linq;
 
 namespace SessionMaster.BLL.ModUser
@@ -21,7 +20,7 @@ namespace SessionMaster.BLL.ModUser
                 throw new InfoException("Username and password is required");
             }
 
-            User user = Find(u => u.Username == username).FirstOrDefault();
+            User user = Get(u => u.Username == username).FirstOrDefault();
 
             if (user == null)
             {

@@ -18,7 +18,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void Valid_ResturnsUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -33,7 +33,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void NullUsername_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -45,7 +45,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void EmptyPassword_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -56,12 +56,10 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             [Fact]
             public void WrongPassword_ThrowsException()
             {
-
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 context.AddUser("Julius", "Testimus", "tester", "test");
-
 
                 //Assert & Act
                 Assert.Throws<InfoException>(() => sut.Authenticate("tester", "TEST"));
@@ -71,7 +69,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void UserNotExists_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
 
                 //Assert & Act
@@ -85,7 +83,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void Valid_ReturnsUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = new User
                 {
@@ -95,7 +93,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 };
 
                 //Act
-                var result =sut.Add(user, "test");
+                var result = sut.Add(user, "test");
 
                 //Assert
                 Assert.NotNull(result);
@@ -111,7 +109,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void EmptyPassword_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = new User
                 {
@@ -128,7 +126,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void UsernameExisits_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -150,7 +148,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void Valid_DeletesUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -166,7 +164,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void NotExisits_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
 
                 //Act & Assert
@@ -180,12 +178,12 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void ByFirstname_ReturnsUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
                 //Act
-                var result = sut.Find(u => u.Firstname == "Julius").FirstOrDefault();
+                var result = sut.Get(u => u.Firstname == "Julius").FirstOrDefault();
 
                 //Assert
                 Assert.Same(user, result);
@@ -195,12 +193,12 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void ByFirstnameAndLastname_ReturnsUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
                 //Act
-                var result = sut.Find(u => u.Firstname == "Julius" && u.Username == "tester").FirstOrDefault();
+                var result = sut.Get(u => u.Firstname == "Julius" && u.Username == "tester").FirstOrDefault();
 
                 //Assert
                 Assert.Same(user, result);
@@ -210,13 +208,13 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void MultipleResults_ReturnsUserList()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user1 = context.AddUser("Julius", "Testimus", "tester", "test");
                 var user2 = context.AddUser("Markus", "Testimus", "tester2", "test2");
 
                 //Act
-                var result = sut.Find(u => u.Lastname == "Testimus");
+                var result = sut.Get(u => u.Lastname == "Testimus");
 
                 //Assert
                 Assert.Contains(user1, result);
@@ -230,13 +228,13 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void HasUsers_ReturnsUserList()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user1 = context.AddUser("Julius", "Testimus", "tester", "test");
                 var user2 = context.AddUser("Markus", "Testimus", "tester2", "test2");
 
                 //Act
-                var result = sut.GetAll();
+                var result = sut.Get();
 
                 //Assert
                 Assert.Contains(user1, result);
@@ -247,11 +245,11 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void NoUsers_ReturnsUserList()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
 
                 //Act
-                var result = sut.GetAll();
+                var result = sut.Get();
 
                 //Assert
                 Assert.Empty(result);
@@ -264,7 +262,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void Valid_ReturnsUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -279,7 +277,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void NotExists_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
 
                 //Act & Assert
@@ -293,7 +291,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void Valid_ReturnsUpdatedUser()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user = context.AddUser("Julius", "Testimus", "tester", "test");
 
@@ -323,7 +321,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void UsernameTaken_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var user1 = context.AddUser("Julius", "Testimus", "tester", "test");
                 var user2 = context.AddUser("Maximus", "Testimus", "tester2", "test2");
@@ -341,7 +339,7 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             public void NotExists_ThrowsException()
             {
                 //Arrange
-                var context = new SessionMasterContext(SessionMasterContextHelper.ContextOptions());
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
                 var sut = new UserRepository(context);
                 var updatedUser = new User
                 {
