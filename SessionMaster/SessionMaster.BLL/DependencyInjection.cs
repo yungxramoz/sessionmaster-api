@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RestSharp;
 using SessionMaster.BLL.Core;
 using SessionMaster.BLL.ModBoardGame;
 using SessionMaster.BLL.ModUser;
@@ -14,6 +15,8 @@ namespace SessionMaster.BLL
             services.AddScoped<IBoardGameRepository, BoardGameAtlasApiRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IRestClient, RestClient>();
 
             return services;
         }

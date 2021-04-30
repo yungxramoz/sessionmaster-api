@@ -16,19 +16,21 @@ namespace SessionMaster.BLL.ModBoardGame
     {
         public const string BASE_URL = "https://api.boardgameatlas.com/api";
         public const string FIELDS = "&fields=id,name,year_published,min_players,max_players,min_playtime,max_playtime,description,thumb_url,image_url";
+        private IRestClient _client;
 
-        public BoardGameAtlasApiRepository(SessionMasterContext context) : base(context)
+        public BoardGameAtlasApiRepository(SessionMasterContext context, IRestClient client) : base(context)
         {
+            _client = client;
         }
 
         public async Task<BoardGameAtlasGameDetails> GetById(string id, string clientId)
         {
-            var client = new RestClient($"{BASE_URL}/search?client_id={clientId}{FIELDS}&ids={id}");
+            _client.BaseUrl = new Uri($"{BASE_URL}/search?client_id={clientId}{FIELDS}&ids={id}");
             var request = new RestRequest(Method.GET);
 
             try
             {
-                IRestResponse response = await client.ExecuteAsync(request);
+                IRestResponse response = await _client.ExecuteAsync(request);
                 if (response.IsSuccessful)
                 {
                     var boardGameInfo = JsonSerializer.Deserialize<BoardGameAtlasGames>(response.Content);
@@ -52,12 +54,12 @@ namespace SessionMaster.BLL.ModBoardGame
 
         public async Task<List<BoardGameAtlasGameDetails>> GetAll(string filter, string clientId)
         {
-            var client = new RestClient($"{BASE_URL}/search?client_id={clientId}{FIELDS}{filter}&order_by=popularity&limit=100");
+            _client.BaseUrl = new Uri($"{BASE_URL}/search?client_id={clientId}{FIELDS}{filter}&order_by=popularity&limit=2");
             var request = new RestRequest(Method.GET);
 
             try
             {
-                IRestResponse response = await client.ExecuteAsync(request);
+                IRestResponse response = await _client.ExecuteAsync(request);
                 if (response.IsSuccessful)
                 {
                     var boardGameInfo = JsonSerializer.Deserialize<BoardGameAtlasGames>(response.Content);
