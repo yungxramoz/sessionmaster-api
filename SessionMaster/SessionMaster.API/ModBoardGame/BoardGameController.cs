@@ -203,9 +203,9 @@ namespace SessionMaster.API.ModBoardGame
             try
             {
                 //verify that user exists
-                var user = _unitOfWork.Users.GetById(id);
+                var user = _unitOfWork.Users.GetById(id, e => e.Include(bg => bg.BoardGames));
 
-                var boardgameToRemove = _unitOfWork.BoardGames.Get(e => e.BoardGameId == boardGameId && e.UserId == id).SingleOrDefault();
+                var boardgameToRemove = user.BoardGames.SingleOrDefault(bg => bg.BoardGameId == boardGameId);
 
                 if (boardgameToRemove == null)
                 {
@@ -220,7 +220,7 @@ namespace SessionMaster.API.ModBoardGame
                 }
                 catch (DbUpdateException ex)
                 {
-                    return BadRequest("The board game is already in the collection");
+                    return BadRequest("Not able to remove board game from the collection");
                 }
 
                 return await GetCollection(id);
