@@ -24,7 +24,7 @@ jobs:
     - name: 🔨 Build with dotnet
       run: dotnet build ./SessionMaster --configuration Release
 
-    - name: dotnet publish
+    - name: 🌐 dotnet publish
       run: dotnet publish ./SessionMaster -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     - name: 📦🔼 Upload artifact for deployment job
@@ -32,12 +32,30 @@ jobs:
       with:
         name: .net-app
         path: ${{env.DOTNET_ROOT}}/myapp
+      
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: ⚙️ Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+        
+    - name: 🔄 Restore dependencies
+      run: dotnet restore ./SessionMaster
+      
+    - name: 🔨 Build
+      run: dotnet build ./SessionMaster --no-restore
+      
     - name: 🧪 Test
       run: dotnet test ./SessionMaster --no-build --verbosity normal
 
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: [build, test]
     environment:
       name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
