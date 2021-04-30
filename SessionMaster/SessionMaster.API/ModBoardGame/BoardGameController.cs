@@ -165,7 +165,7 @@ namespace SessionMaster.API.ModBoardGame
                 {
                     _unitOfWork.Complete();
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException)
                 {
                     return BadRequest("The board game is already in the collection");
                 }
@@ -218,7 +218,7 @@ namespace SessionMaster.API.ModBoardGame
                 {
                     _unitOfWork.Complete();
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException)
                 {
                     return BadRequest("Not able to remove board game from the collection");
                 }
