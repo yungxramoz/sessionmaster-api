@@ -54,7 +54,7 @@ namespace SessionMaster.BLL.ModBoardGame
 
         public async Task<List<BoardGameAtlasGameDetails>> GetAll(string filter, string clientId)
         {
-            _client.BaseUrl = new Uri($"{BASE_URL}/search?client_id={clientId}{FIELDS}{filter}&order_by=popularity&limit=2");
+            _client.BaseUrl = new Uri($"{BASE_URL}/search?client_id={clientId}{FIELDS}{filter}&order_by=popularity&limit=100");
             var request = new RestRequest(Method.GET);
 
             try

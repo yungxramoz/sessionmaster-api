@@ -193,12 +193,12 @@ namespace SessionMaster.API.ModBoardGame
         /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">Board game or user not found</response>
         [Authorize]
-        [HttpDelete("~/api/users/{id}/boardgames")]
+        [HttpDelete("~/api/users/{id}/boardgames/{boardGameId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteFromCollection(Guid id, [FromForm] string boardGameId)
+        public async Task<IActionResult> DeleteFromCollection(Guid id, string boardGameId)
         {
             try
             {
