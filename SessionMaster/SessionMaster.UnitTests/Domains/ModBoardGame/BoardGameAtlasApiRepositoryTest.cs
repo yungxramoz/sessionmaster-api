@@ -14,7 +14,7 @@ using System.Net;
 using System.Threading;
 using Xunit;
 
-namespace SessionMaster.UnitTests.Domains.ModUser
+namespace SessionMaster.UnitTests.Domains.ModBoardGame
 {
     public class BoardGameAtlasApiRepositoryTest
     {
