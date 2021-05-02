@@ -237,7 +237,10 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
                 var user = new User
                 {
                     Id = Guid.NewGuid(),
-                    BoardGames = new List<UserBoardGame>()
+                    BoardGames = new List<UserBoardGame>
+                    {
+                        new UserBoardGame()
+                    }
                 };
 
                 _unitOfWork.Setup(uow => uow.Users.GetById(

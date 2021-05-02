@@ -109,7 +109,7 @@ namespace SessionMaster.API.ModBoardGame
             {
                 var user = _unitOfWork.Users.GetById(id, u => u.Include(u => u.BoardGames));
 
-                if (user.BoardGames == null)
+                if (user.BoardGames?.Any() != true)
                 {
                     return Ok();
                 }
