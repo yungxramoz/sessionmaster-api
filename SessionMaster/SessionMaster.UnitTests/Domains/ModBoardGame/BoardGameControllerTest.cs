@@ -313,6 +313,10 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
                 {
                     Id = boardGameId
                 };
+                var addToCollectionModel = new AddToCollectionModel
+                {
+                    BoardGameId = boardGameId
+                };
 
                 _unitOfWork.Setup(uow => uow.Users.GetById(
                     user.Id,
@@ -325,7 +329,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
                 var sut = new BoardGameController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 
                 //Act
-                var result = await sut.PostToCollection(user.Id, boardGameId);
+                var result = await sut.PostToCollection(user.Id, addToCollectionModel);
 
                 //Assert
                 var okObjectResult = Assert.IsType<OkObjectResult>(result);
@@ -337,6 +341,10 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
             {
                 //Arrange
                 var exception = new InfoException("test message");
+                var addBoardGame = new AddToCollectionModel
+                {
+                    BoardGameId = RandomStringTestHelper.Generate()
+                };
 
                 _unitOfWork.Setup(uow => uow.Users.GetById(
                     It.IsAny<Guid>(),
@@ -346,7 +354,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
                 var sut = new BoardGameController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 
                 //Act
-                var result = await sut.PostToCollection(Guid.NewGuid(), RandomStringTestHelper.Generate());
+                var result = await sut.PostToCollection(Guid.NewGuid(), addBoardGame);
 
                 //Assert
                 var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -358,6 +366,10 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
             {
                 //Arrange
                 var exception = new NotFoundException("test message");
+                var addBoardGame = new AddToCollectionModel
+                {
+                    BoardGameId = RandomStringTestHelper.Generate()
+                };
 
                 _unitOfWork.Setup(uow => uow.Users.GetById(
                     It.IsAny<Guid>(),
@@ -367,7 +379,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
                 var sut = new BoardGameController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 
                 //Act
-                var result = await sut.PostToCollection(Guid.NewGuid(), RandomStringTestHelper.Generate());
+                var result = await sut.PostToCollection(Guid.NewGuid(), addBoardGame);
 
                 //Assert
                 var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
@@ -379,6 +391,10 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
             {
                 //Arrange
                 var exception = new DbUpdateException("this message will be overridden");
+                var addBoardGame = new AddToCollectionModel
+                {
+                    BoardGameId = RandomStringTestHelper.Generate()
+                };
 
                 _unitOfWork.Setup(uow => uow.Users.GetById(
                     It.IsAny<Guid>(),
@@ -390,7 +406,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
                 var sut = new BoardGameController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
 
                 //Act
-                var result = await sut.PostToCollection(Guid.NewGuid(), RandomStringTestHelper.Generate());
+                var result = await sut.PostToCollection(Guid.NewGuid(), addBoardGame);
 
                 //Assert
                 var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
