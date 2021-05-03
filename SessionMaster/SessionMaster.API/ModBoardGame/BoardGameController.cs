@@ -133,7 +133,7 @@ namespace SessionMaster.API.ModBoardGame
         /// Add a board game to a users collection
         /// </summary>
         /// <param name="id">The id of the user whose board game collection to extend</param>
-        /// <param name="boardGameId">The id of the board game to add to the collection</param>
+        /// <param name="boardGame">The id of the board game to add to the collection</param>
         /// <returns>Complete Collection</returns>
         /// <response code="200">Successfully added the board game to the users collection</response>
         /// <response code="400">An error occured either on the tirdparty api or the db action</response>
@@ -145,18 +145,18 @@ namespace SessionMaster.API.ModBoardGame
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PostToCollection(Guid id, [FromForm] string boardGameId)
+        public async Task<IActionResult> PostToCollection(Guid id, [FromBody] AddToCollectionModel boardGame)
         {
             try
             {
                 //verify that user and boardgame exists
                 var user = _unitOfWork.Users.GetById(id);
-                var boardGame = await _unitOfWork.BoardGames.GetById(boardGameId, _appSettings.BgaClientId);
+                var boardGameEntity = await _unitOfWork.BoardGames.GetById(boardGame.BoardGameId, _appSettings.BgaClientId);
 
                 var addModel = new UserBoardGame
                 {
                     UserId = user.Id,
-                    BoardGameId = boardGame.Id
+                    BoardGameId = boardGameEntity.Id
                 };
 
                 _unitOfWork.BoardGames.Add(addModel);
