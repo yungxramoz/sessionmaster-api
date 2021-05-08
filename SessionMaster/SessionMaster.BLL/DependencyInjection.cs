@@ -2,6 +2,7 @@
 using RestSharp;
 using SessionMaster.BLL.Core;
 using SessionMaster.BLL.ModBoardGame;
+using SessionMaster.BLL.ModSessionplan;
 using SessionMaster.BLL.ModUser;
 
 namespace SessionMaster.BLL
@@ -13,6 +14,7 @@ namespace SessionMaster.BLL
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBoardGameRepository, BoardGameAtlasApiRepository>();
+            services.AddScoped<ISessionplanRepository, SessionplanRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
