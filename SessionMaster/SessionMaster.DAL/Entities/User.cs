@@ -26,5 +26,6 @@ namespace SessionMaster.DAL.Entities
         public byte[] PasswordSalt { get; set; }
 
         public ICollection<UserBoardGame> BoardGames { get; set; }
+        public ICollection<Sessionplan> Sessionplans { get; set; }
     }
 }
