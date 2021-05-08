@@ -9,6 +9,11 @@ namespace SessionMaster.DAL.Configurations
         public void Configure(EntityTypeBuilder<Sessionplan> builder)
         {
             builder.ToTable("Sessionplans");
+
+            builder
+                .HasOne(sp => sp.User)
+                .WithMany(u => u.Sessionplans)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

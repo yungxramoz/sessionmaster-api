@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,7 +7,7 @@ namespace SessionMaster.DAL.Entities
 {
     public class Sessionplan : BaseEntity
     {
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -14,5 +15,7 @@ namespace SessionMaster.DAL.Entities
 
         [ForeignKey("UserId")]
         public User User { get; set; }
+
+        public ICollection<Session> Sessions { get; set; }
     }
 }
