@@ -45,7 +45,7 @@ namespace SessionMaster.BLL.Core
                 query = include(query);
             }
 
-            var entity = query.AsNoTracking().SingleOrDefault(e => e.Id == id);
+            var entity = query.SingleOrDefault(e => e.Id == id);
 
             if (entity == null)
             {
@@ -84,10 +84,11 @@ namespace SessionMaster.BLL.Core
         public virtual TEntity Update(TEntity entity)
         {
             //Validate if entity exists
-            GetById(entity.Id);
+            var dbEntity = GetById(entity.Id);
 
-            _dbSet.Update(entity);
-            return entity;
+            //_dbSet.Update(entity);
+            _context.Entry(dbEntity).CurrentValues.SetValues(entity);
+            return dbEntity;
         }
     }
 }
