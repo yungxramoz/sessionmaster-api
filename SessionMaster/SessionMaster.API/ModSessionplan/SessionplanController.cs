@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SessionMaster.API.Core.Attributes;
 using SessionMaster.API.ModSessionplan.ViewModels;
-using SessionMaster.API.ModUser.ViewModels;
 using SessionMaster.BLL.Core;
 using SessionMaster.Common.Exceptions;
 using SessionMaster.DAL.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace SessionMaster.API.ModUser
+namespace SessionMaster.API.ModSessionplan
 {
     [Produces("application/json")]
     [Route("api/sessionplans")]
