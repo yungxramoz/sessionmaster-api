@@ -75,32 +75,22 @@ namespace SessionMaster.API.ModSessionplan
         /// <response code="200">Successfully created a sessionplan</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Post([FromBody] AddSessionplanModel sessionplan)
         {
-            try
-            {
-                var sessionplanEntity = _mapper.Map<Sessionplan>(sessionplan);
+            var sessionplanEntity = _mapper.Map<Sessionplan>(sessionplan);
 
-                var currentUser = HttpContext.Items["User"];
-                if (currentUser != null)
-                {
-                    sessionplanEntity.UserId = ((User)currentUser).Id;
-                }
-
-                var addedSessionplan = _unitOfWork.Sessionplans.Add(sessionplanEntity);
-                _unitOfWork.Complete();
-
-                return Get(addedSessionplan.Id);
-            }
-            catch (NotFoundException ex)
+            var currentUser = HttpContext.Items["User"];
+            if (currentUser != null)
             {
-                return NotFound(ex.Message);
+                sessionplanEntity.UserId = ((User)currentUser).Id;
             }
-            catch (InfoException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            var addedSessionplan = _unitOfWork.Sessionplans.Add(sessionplanEntity);
+            _unitOfWork.Complete();
+
+            var model = _mapper.Map<SessionplanDetailModel>(addedSessionplan);
+
+            return Ok(model);
         }
 
         /// <summary>
@@ -115,7 +105,6 @@ namespace SessionMaster.API.ModSessionplan
         [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Put(Guid id, [FromBody] UpdateSessionplanModel model)
