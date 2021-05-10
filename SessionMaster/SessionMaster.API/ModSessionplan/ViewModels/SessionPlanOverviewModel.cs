@@ -2,7 +2,7 @@
 
 namespace SessionMaster.API.ModSessionplan.ViewModels
 {
-    public class SessionPlanOverviewModel
+    public class SessionplanOverviewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

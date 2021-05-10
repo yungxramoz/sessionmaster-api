@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SessionMaster.API.ModSessionplan.ViewModels
 {
-    public class SessionPlanDetailModel : SessionPlanOverviewModel
+    public class SessionplanDetailModel : SessionplanOverviewModel
     {
         public List<SessionModel> Sessions { get; set; }
     }

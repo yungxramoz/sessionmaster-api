@@ -8,8 +8,8 @@ namespace SessionMaster.API.ModSessionplan
     {
         public SessionplanMapProfile()
         {
-            CreateMap<Sessionplan, SessionPlanOverviewModel>();
-            CreateMap<Sessionplan, SessionPlanDetailModel>();
+            CreateMap<Sessionplan, SessionplanOverviewModel>();
+            CreateMap<Sessionplan, SessionplanDetailModel>();
             CreateMap<AddSessionplanModel, Sessionplan>();
             CreateMap<UpdateSessionplanModel, Sessionplan>();
         }

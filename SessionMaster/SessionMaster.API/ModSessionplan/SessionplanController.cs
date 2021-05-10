@@ -40,7 +40,7 @@ namespace SessionMaster.API.ModUser
         {
             var currentUser = (User)HttpContext.Items["User"];
             var sessionplans = _unitOfWork.Sessionplans.Get(u => u.UserId == currentUser.Id);
-            var model = _mapper.Map<IList<SessionPlanOverviewModel>>(sessionplans);
+            var model = _mapper.Map<IList<SessionplanOverviewModel>>(sessionplans);
             return Ok(model);
         }
 
@@ -59,7 +59,7 @@ namespace SessionMaster.API.ModUser
             try
             {
                 var sessionplan = _unitOfWork.Sessionplans.GetById(id);
-                var model = _mapper.Map<SessionPlanDetailModel>(sessionplan);
+                var model = _mapper.Map<SessionplanDetailModel>(sessionplan);
                 return Ok(model);
             }
             catch (NotFoundException ex)
@@ -132,7 +132,7 @@ namespace SessionMaster.API.ModUser
                 var sessionplanUpdated = _unitOfWork.Sessionplans.Update(sessionplan);
                 _unitOfWork.Complete();
 
-                var returnModel = _mapper.Map<SessionPlanDetailModel>(sessionplanUpdated);
+                var returnModel = _mapper.Map<SessionplanDetailModel>(sessionplanUpdated);
                 return Ok(returnModel);
             }
             catch (NotFoundException ex)
