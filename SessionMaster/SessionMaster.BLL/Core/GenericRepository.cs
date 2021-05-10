@@ -45,7 +45,7 @@ namespace SessionMaster.BLL.Core
                 query = include(query);
             }
 
-            var entity = query.SingleOrDefault(e => e.Id == id);
+            var entity = query.AsNoTracking().SingleOrDefault(e => e.Id == id);
 
             if (entity == null)
             {
