@@ -14,7 +14,7 @@ namespace SessionMaster.UnitTests.TestHelper
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-        #region User Test Helper
+        #region Entity Test Helper
 
         public static User AddUser(this SessionMasterContext context, string firstname, string lastname, string username, string password)
         {
@@ -37,6 +37,22 @@ namespace SessionMaster.UnitTests.TestHelper
             return user;
         }
 
-        #endregion User Test Helper
+        public static Sessionplan AddSessionplan(this SessionMasterContext context, string name, Guid? userId = null)
+        {
+            var sessionplan = new Sessionplan
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                UserId = userId
+            };
+
+            context.Add(sessionplan);
+
+            context.SaveChanges();
+
+            return sessionplan;
+        }
+
+        #endregion Entity Test Helper
     }
 }
