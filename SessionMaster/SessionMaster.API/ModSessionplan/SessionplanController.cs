@@ -8,6 +8,7 @@ using SessionMaster.Common.Exceptions;
 using SessionMaster.DAL.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SessionMaster.API.ModSessionplan
 {
@@ -40,7 +41,7 @@ namespace SessionMaster.API.ModSessionplan
             var currentUser = (User)HttpContext.Items["User"];
             var sessionplans = _unitOfWork.Sessionplans.Get(u => u.UserId == currentUser.Id);
             var model = _mapper.Map<IList<SessionplanOverviewModel>>(sessionplans);
-            return Ok(model);
+            return Ok(model.OrderBy(s => s.Name));
         }
 
         /// <summary>

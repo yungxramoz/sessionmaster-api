@@ -117,7 +117,7 @@ namespace SessionMaster.API.ModBoardGame
                 var boardgameIds = user.BoardGames.Select(bg => bg.BoardGameId).ToList();
                 var boardGames = await _unitOfWork.BoardGames.GetAll(BoardGameAtlasFilterHelper.ByIds(boardgameIds), _appSettings.BgaClientId);
                 var model = _mapper.Map<IList<BoardGameModel>>(boardGames);
-                return Ok(model);
+                return Ok(model.OrderBy(bg => bg.Name));
             }
             catch (NotFoundException ex)
             {
