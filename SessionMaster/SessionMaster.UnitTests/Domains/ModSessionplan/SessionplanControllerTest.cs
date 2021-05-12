@@ -10,6 +10,7 @@ using SessionMaster.DAL.Entities;
 using SessionMaster.UnitTests.TestHelper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
@@ -50,7 +51,7 @@ namespace SessionMaster.UnitTests.Domains.ModSessionplan
 
                 //Assert
                 var okObjectResult = Assert.IsType<OkObjectResult>(result);
-                Assert.Same(sessionplanModelList, okObjectResult.Value);
+                Assert.Equal(sessionplanModelList.OrderBy(sp => sp.Name), okObjectResult.Value);
             }
 
             [Fact]
