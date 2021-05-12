@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SessionMaster.API.ModSessionplan.ViewModels
+namespace SessionMaster.API.ModSession.ViewModels
 {
     public class SessionModel
     {

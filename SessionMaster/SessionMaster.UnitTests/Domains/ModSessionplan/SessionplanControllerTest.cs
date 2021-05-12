@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using SessionMaster.API.ModSession.ViewModels;
 using SessionMaster.API.ModSessionplan;
 using SessionMaster.API.ModSessionplan.ViewModels;
 using SessionMaster.BLL.Core;

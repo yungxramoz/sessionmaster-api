@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SessionMaster.API.ModSession.ViewModels;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SessionMaster.API.ModSessionplan.ViewModels
