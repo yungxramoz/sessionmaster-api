@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SessionMaster.API.Core.Attributes;
 using SessionMaster.API.ModSessionplan.ViewModels;
 using SessionMaster.BLL.Core;
@@ -58,7 +59,7 @@ namespace SessionMaster.API.ModSessionplan
         {
             try
             {
-                var sessionplan = _unitOfWork.Sessionplans.GetById(id);
+                var sessionplan = _unitOfWork.Sessionplans.GetById(id, e => e.Include(s => s.Sessions));
                 var model = _mapper.Map<SessionplanDetailModel>(sessionplan);
                 return Ok(model);
             }

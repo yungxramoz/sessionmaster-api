@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using SessionMaster.API.ModSession.ViewModels;
 using SessionMaster.API.ModSessionplan;
@@ -70,7 +71,9 @@ namespace SessionMaster.UnitTests.Domains.ModSessionplan
                 };
 
                 _mapper.Setup(m => m.Map<SessionplanDetailModel>(sessionplan)).Returns(sessionplanModel);
-                _unitOfWork.Setup(uow => uow.Sessionplans.GetById(planId, null)).Returns(sessionplan);
+                _unitOfWork.Setup(uow => uow.Sessionplans.GetById(planId,
+                    It.IsAny<Func<IQueryable<Sessionplan>, IIncludableQueryable<Sessionplan, object>>>())
+                ).Returns(sessionplan);
 
                 var sut = new SessionplanController(_unitOfWork.Object, _mapper.Object);
 
@@ -88,7 +91,9 @@ namespace SessionMaster.UnitTests.Domains.ModSessionplan
                 //Arrange
                 var exception = new NotFoundException("test");
 
-                _unitOfWork.Setup(uow => uow.Sessionplans.GetById(It.IsAny<Guid>(), null)).Throws(exception);
+                _unitOfWork.Setup(uow => uow.Sessionplans.GetById(It.IsAny<Guid>(),
+                    It.IsAny<Func<IQueryable<Sessionplan>, IIncludableQueryable<Sessionplan, object>>>())
+                ).Throws(exception);
 
                 var sut = new SessionplanController(_unitOfWork.Object, _mapper.Object);
 
