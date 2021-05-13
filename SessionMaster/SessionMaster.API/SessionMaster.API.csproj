@@ -24,9 +24,4 @@
     <ProjectReference Include="..\SessionMaster.DAL\SessionMaster.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ModSessionPlan\" />
-    <Folder Include="ModSession\" />
-  </ItemGroup>
-
 </Project>

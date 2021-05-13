@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SessionMaster.DAL;
 
 namespace SessionMaster.DAL.Migrations
 {
     [DbContext(typeof(SessionMasterContext))]
-    partial class SessionMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20210508181201_CreateSessionPlans_CreateSessions")]
+    partial class CreateSessionPlans_CreateSessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +57,7 @@ namespace SessionMaster.DAL.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -126,7 +128,7 @@ namespace SessionMaster.DAL.Migrations
             modelBuilder.Entity("SessionMaster.DAL.Entities.Session", b =>
                 {
                     b.HasOne("SessionMaster.DAL.Entities.Sessionplan", "Sessionplan")
-                        .WithMany("Sessions")
+                        .WithMany()
                         .HasForeignKey("SessionplanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -137,9 +139,10 @@ namespace SessionMaster.DAL.Migrations
             modelBuilder.Entity("SessionMaster.DAL.Entities.Sessionplan", b =>
                 {
                     b.HasOne("SessionMaster.DAL.Entities.User", "User")
-                        .WithMany("Sessionplans")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -155,16 +158,9 @@ namespace SessionMaster.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SessionMaster.DAL.Entities.Sessionplan", b =>
-                {
-                    b.Navigation("Sessions");
-                });
-
             modelBuilder.Entity("SessionMaster.DAL.Entities.User", b =>
                 {
                     b.Navigation("BoardGames");
-
-                    b.Navigation("Sessionplans");
                 });
 #pragma warning restore 612, 618
         }

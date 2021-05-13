@@ -226,7 +226,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
 
                 //Assert
                 var okObjectResult = Assert.IsType<OkObjectResult>(result);
-                Assert.Same(boardGameList, okObjectResult.Value);
+                Assert.Equal(boardGameList.OrderBy(bg => bg.Name), okObjectResult.Value);
             }
 
             [Fact]
@@ -333,7 +333,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
 
                 //Assert
                 var okObjectResult = Assert.IsType<OkObjectResult>(result);
-                Assert.Same(boardGameList, okObjectResult.Value);
+                Assert.Equal(boardGameList.OrderBy(bg => bg.Name), okObjectResult.Value);
             }
 
             [Fact]
@@ -459,7 +459,7 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
 
                 //Assert
                 var okObjectResult = Assert.IsType<OkObjectResult>(result);
-                Assert.Same(boardGameList, okObjectResult.Value);
+                Assert.Equal(boardGameList.OrderBy(bg => bg.Name), okObjectResult.Value);
             }
 
             [Fact]
