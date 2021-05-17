@@ -1,4 +1,5 @@
 ﻿using SessionMaster.BLL.ModBoardGame;
+using SessionMaster.BLL.ModSession;
 using SessionMaster.BLL.ModSessionplan;
 using SessionMaster.BLL.ModUser;
 using System;
@@ -13,6 +14,8 @@ namespace SessionMaster.BLL.Core
         IBoardGameRepository BoardGames { get; }
 
         ISessionplanRepository Sessionplans { get; }
+
+        ISessionRepository Sessions { get; }
 
         //others
         int Complete();
