@@ -22,5 +22,6 @@ namespace SessionMaster.DAL.Entities
         public Sessionplan Sessionplan { get; set; }
 
         public ICollection<SessionUser> SessionUsers { get; set; }
+        public ICollection<SessionAnonymousUser> SessionAnonymousUsers { get; set; }
     }
 }
