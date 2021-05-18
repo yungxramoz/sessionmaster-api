@@ -53,6 +53,37 @@ namespace SessionMaster.UnitTests.TestHelper
             return sessionplan;
         }
 
+        public static Session AddSession(this SessionMasterContext context, DateTime? date = null)
+        {
+            var dateNotNull = date ?? DateTime.UtcNow;
+
+            var session = new Session
+            {
+                Id = Guid.NewGuid(),
+                Date = dateNotNull
+            };
+
+            context.Add(session);
+
+            context.SaveChanges();
+
+            return session;
+        }
+
+        public static SessionUser AssignUserToSession(this SessionMasterContext context, Guid userId, Guid sessionId)
+        {
+            var sessionUser = new SessionUser
+            {
+                UserId = userId,
+                SessionId = sessionId
+            };
+
+            context.Add(sessionUser);
+            context.SaveChanges();
+
+            return sessionUser;
+        }
+
         #endregion Entity Test Helper
     }
 }
