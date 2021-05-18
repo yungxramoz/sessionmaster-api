@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using SessionMaster.API.ModSession.ViewModels;
 using SessionMaster.DAL.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SessionMaster.API.ModSession
 {
@@ -8,7 +10,7 @@ namespace SessionMaster.API.ModSession
     {
         public SessionMapProfile()
         {
-            CreateMap<SessionModel, Session>().ReverseMap();
+            CreateMap<Session, SessionModel>().ReverseMap();
         }
     }
 }

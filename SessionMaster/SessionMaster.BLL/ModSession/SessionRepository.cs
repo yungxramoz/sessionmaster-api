@@ -15,7 +15,11 @@ namespace SessionMaster.BLL.ModSession
 
         public Session Register(Guid userId, Guid sessionId)
         {
-            var session = GetById(sessionId, e => e.Include(s => s.SessionUsers).ThenInclude(su => su.User));
+            var session =
+                    GetById(sessionId,
+                        e => e.Include(s => s.SessionUsers).ThenInclude(su => su.User)
+                            .Include(s => s.SessionAnonymousUsers).ThenInclude(sau => sau.AnonymousUser)
+                    );
 
             if (!session.SessionUsers.Any(s => s.UserId == userId))
             {
@@ -31,7 +35,12 @@ namespace SessionMaster.BLL.ModSession
 
         public Session Cancel(Guid userId, Guid sessionId)
         {
-            var session = GetById(sessionId, e => e.Include(s => s.SessionUsers).ThenInclude(su => su.User));
+            var session =
+                    GetById(sessionId,
+                        e => e.Include(s => s.SessionUsers).ThenInclude(su => su.User)
+                            .Include(s => s.SessionAnonymousUsers).ThenInclude(sau => sau.AnonymousUser)
+                    );
+
             var sessionUser = session.SessionUsers.FirstOrDefault(su => su.UserId == userId && su.SessionId == sessionId);
 
             if (sessionUser != null)
