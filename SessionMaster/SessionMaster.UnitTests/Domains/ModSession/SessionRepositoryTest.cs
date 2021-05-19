@@ -85,6 +85,76 @@ namespace SessionMaster.UnitTests.Domains.ModSession
             }
         }
 
+        public class RegisterAnonymousTest : SessionRepositoryTest
+        {
+            [Fact]
+            public void Valid_ReturnsSession()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+                var user = context.AddAnonymousUser(RandomStringTestHelper.Generate());
+                var session = context.AddSession();
+
+                var sut = new SessionRepository(context);
+
+                //Act
+                var result = sut.RegisterAnonymous(user.Id, session.Id);
+                context.SaveChanges();
+
+                var sessionSaved = context.Sessions.First();
+                var sessionUserSaved = sessionSaved.SessionAnonymousUsers.First();
+
+                //Assert
+                Assert.NotNull(result);
+                Assert.NotNull(result.SessionAnonymousUsers);
+
+                Assert.Equal(session.Id, sessionSaved.Id);
+                Assert.Equal(session.Date, sessionSaved.Date);
+                Assert.Equal(1, result.SessionAnonymousUsers.Count);
+                Assert.Equal(user.Id, sessionUserSaved.AnonymousUserId);
+            }
+
+            [Fact]
+            public void Valid_AlreadySignedUp_ReturnsSession()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+                var user = context.AddAnonymousUser(RandomStringTestHelper.Generate());
+                var session = context.AddSession();
+                _ = context.AssignAnonymousUserToSession(user.Id, session.Id);
+
+                var sut = new SessionRepository(context);
+
+                //Act
+                var result = sut.RegisterAnonymous(user.Id, session.Id);
+                context.SaveChanges();
+
+                var sessionSaved = context.Sessions.First();
+                var sessionUserSaved = sessionSaved.SessionAnonymousUsers.First();
+
+                //Assert
+                Assert.NotNull(result);
+                Assert.NotNull(result.SessionUsers);
+
+                Assert.Equal(session.Id, sessionSaved.Id);
+                Assert.Equal(session.Date, sessionSaved.Date);
+                Assert.Equal(1, result.SessionAnonymousUsers.Count);
+                Assert.Equal(user.Id, sessionUserSaved.AnonymousUserId);
+            }
+
+            [Fact]
+            public void SessionNotExist_ThrowsNotFoundException()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+
+                var sut = new SessionRepository(context);
+
+                //Act & Assert
+                Assert.Throws<NotFoundException>(() => sut.RegisterAnonymous(Guid.NewGuid(), Guid.NewGuid()));
+            }
+        }
+
         public class CancelTest : SessionRepositoryTest
         {
             [Fact]
@@ -148,6 +218,72 @@ namespace SessionMaster.UnitTests.Domains.ModSession
 
                 //Act & Assert
                 Assert.Throws<NotFoundException>(() => sut.Cancel(Guid.NewGuid(), Guid.NewGuid()));
+            }
+        }
+
+        public class CancelAnonymousTest : SessionRepositoryTest
+        {
+            [Fact]
+            public void Valid_ReturnsSession()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+                var user = context.AddAnonymousUser(RandomStringTestHelper.Generate());
+                var session = context.AddSession();
+                _ = context.AssignAnonymousUserToSession(user.Id, session.Id);
+
+                var sut = new SessionRepository(context);
+
+                //Act
+                var result = sut.CancelAnonymous(user.Id, session.Id);
+                context.SaveChanges();
+
+                var sessionSaved = context.Sessions.First();
+
+                //Assert
+                Assert.NotNull(result);
+                Assert.NotNull(result.SessionAnonymousUsers);
+
+                Assert.Equal(session.Id, sessionSaved.Id);
+                Assert.Equal(session.Date, sessionSaved.Date);
+                Assert.Equal(0, result.SessionAnonymousUsers.Count);
+            }
+
+            [Fact]
+            public void Valid_NotSignedUp_ReturnsSession()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+                var user = context.AddAnonymousUser(RandomStringTestHelper.Generate());
+                var session = context.AddSession();
+
+                var sut = new SessionRepository(context);
+
+                //Act
+                var result = sut.CancelAnonymous(user.Id, session.Id);
+                context.SaveChanges();
+
+                var sessionSaved = context.Sessions.First();
+
+                //Assert
+                Assert.NotNull(result);
+                Assert.NotNull(result.SessionAnonymousUsers);
+
+                Assert.Equal(session.Id, sessionSaved.Id);
+                Assert.Equal(session.Date, sessionSaved.Date);
+                Assert.Equal(0, result.SessionAnonymousUsers.Count);
+            }
+
+            [Fact]
+            public void SessionNotExist_ThrowsNotFoundException()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+
+                var sut = new SessionRepository(context);
+
+                //Act & Assert
+                Assert.Throws<NotFoundException>(() => sut.CancelAnonymous(Guid.NewGuid(), Guid.NewGuid()));
             }
         }
     }
