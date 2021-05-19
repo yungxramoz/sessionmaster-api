@@ -8,6 +8,10 @@ namespace SessionMaster.BLL.ModSession
     {
         Session Register(Guid userId, Guid sessionId);
 
+        Session RegisterAnonymous(Guid userId, Guid sessionId);
+
         Session Cancel(Guid userId, Guid sessionId);
+
+        Session CancelAnonymous(Guid userId, Guid sessionId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RestSharp;
 using SessionMaster.BLL.Core;
+using SessionMaster.BLL.ModAnonymousUser;
 using SessionMaster.BLL.ModBoardGame;
 using SessionMaster.BLL.ModSession;
 using SessionMaster.BLL.ModSessionplan;
@@ -14,6 +15,7 @@ namespace SessionMaster.BLL
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAnonymousUserRepository, AnonymousUserRepository>();
             services.AddScoped<IBoardGameRepository, BoardGameAtlasApiRepository>();
             services.AddScoped<ISessionplanRepository, SessionplanRepository>();
             services.AddScoped<ISessionRepository, SessionRepository>();

@@ -41,11 +41,7 @@ namespace SessionMaster.API.ModSession
         {
             try
             {
-                var session =
-                    _unitOfWork.Sessions.GetById(id,
-                        e => e.Include(s => s.SessionUsers).ThenInclude(su => su.User)
-                            .Include(s => s.SessionAnonymousUsers).ThenInclude(sau => sau.AnonymousUser)
-                    );
+                var session = _unitOfWork.Sessions.GetById(id);
 
                 var model = _mapper.Map<SessionModel>(session);
                 model.Users = MapSessionUsersToSessionUserModel(session).OrderBy(u => u.Name);
@@ -77,21 +73,30 @@ namespace SessionMaster.API.ModSession
 
             try
             {
-                if (userResponse == null)
+                var currentUser = HttpContext.Items["User"];
+                if (currentUser != null)
                 {
-                    var currentUser = HttpContext.Items["User"];
-                    if (currentUser == null)
-                    {
-                        return BadRequest("Provide a name to register");
-                    }
-
                     var userId = ((User)currentUser).Id;
-
                     session = _unitOfWork.Sessions.Register(userId, id);
                 }
                 else
                 {
-                    //Do stuff for unauth user
+                    if (userResponse == null)
+                    {
+                        return BadRequest("Provide a name to register");
+                    }
+
+                    var anonymousUser = GetAnonymousUserBySession(id, userResponse.Name);
+
+                    if (anonymousUser == null)
+                    {
+                        anonymousUser = _unitOfWork.AnonymousUsers.Add(new AnonymousUser
+                        {
+                            Name = userResponse.Name
+                        });
+                    }
+
+                    session = _unitOfWork.Sessions.RegisterAnonymous(anonymousUser.Id, id);
                 }
 
                 _unitOfWork.Complete();
@@ -126,21 +131,33 @@ namespace SessionMaster.API.ModSession
 
             try
             {
-                if (userResponse == null)
+                var currentUser = HttpContext.Items["User"];
+                if (currentUser != null)
                 {
-                    var currentUser = HttpContext.Items["User"];
-                    if (currentUser == null)
-                    {
-                        return BadRequest("Provide a name to cancel");
-                    }
-
                     var userId = ((User)currentUser).Id;
-
                     session = _unitOfWork.Sessions.Cancel(userId, id);
                 }
                 else
                 {
-                    //Do stuff for unauth user
+                    if (userResponse == null)
+                    {
+                        return BadRequest("Provide a name to cancel");
+                    }
+
+                    var anonymousUser = GetAnonymousUserBySession(id, userResponse.Name);
+
+                    if (anonymousUser == null)
+                    {
+                        return NotFound("This user does not exist in this sessionplan");
+                    }
+
+                    session = _unitOfWork.Sessions.CancelAnonymous(anonymousUser.Id, id);
+
+                    //cleanup the anonymous user if the last session has been canceled to prevent "Leichen" in the DB
+                    if (!anonymousUser.SessionAnonymousUsers.Any(s => s.SessionId != id))
+                    {
+                        _unitOfWork.AnonymousUsers.Remove(anonymousUser.Id);
+                    }
                 }
 
                 _unitOfWork.Complete();
@@ -172,6 +189,22 @@ namespace SessionMaster.API.ModSession
             users.AddRange(anonymousUsers);
 
             return users;
+        }
+
+        /// <summary>
+        /// Gets the anonymous user of a sessionplan based on a session and its name if any exists
+        /// </summary>
+        /// <param name="sessionId">The session id to check the plan</param>
+        /// <param name="userName">The name of the anonymous user</param>
+        /// <returns>The anonymous user if exists</returns>
+        private AnonymousUser GetAnonymousUserBySession(Guid sessionId, string userName)
+        {
+            var plan = _unitOfWork.Sessionplans.Get(sp => sp.Sessions.Any(s => s.Id == sessionId),
+                        include: e => e.Include(s => s.Sessions).ThenInclude(a => a.SessionAnonymousUsers).ThenInclude(sa => sa.AnonymousUser));
+
+            var sessions = plan?.FirstOrDefault()?.Sessions?.FirstOrDefault(s => s.SessionAnonymousUsers.Any(sa => sa.AnonymousUser.Name == userName));
+
+            return sessions?.SessionAnonymousUsers.FirstOrDefault(su => su.AnonymousUser.Name == userName)?.AnonymousUser;
         }
     }
 }
