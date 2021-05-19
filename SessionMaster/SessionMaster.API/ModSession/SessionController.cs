@@ -148,7 +148,7 @@ namespace SessionMaster.API.ModSession
 
                     if (anonymousUser == null)
                     {
-                        return NotFound("This user does not exist in this sessionplan");
+                        return NotFound("No user found with this name");
                     }
 
                     session = _unitOfWork.Sessions.CancelAnonymous(anonymousUser.Id, id);
