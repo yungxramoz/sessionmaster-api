@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SessionMaster.API.ModSession.ViewModels
 {
@@ -11,5 +12,7 @@ namespace SessionMaster.API.ModSession.ViewModels
         public DateTime? StartTime { get; set; }
 
         public DateTime? EndTime { get; set; }
+
+        public IEnumerable<SessionUserModel> Users { get; set; }
     }
 }

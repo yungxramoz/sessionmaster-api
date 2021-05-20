@@ -27,5 +27,7 @@ namespace SessionMaster.DAL.Entities
 
         public ICollection<UserBoardGame> BoardGames { get; set; }
         public ICollection<Sessionplan> Sessionplans { get; set; }
+
+        public ICollection<SessionUser> SessionUsers { get; set; }
     }
 }

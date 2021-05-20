@@ -3,37 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SessionMaster.DAL;
 
 namespace SessionMaster.DAL.Migrations
 {
     [DbContext(typeof(SessionMasterContext))]
-    partial class SessionMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20210517190652_CreateSessionUser")]
+    partial class CreateSessionUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("SessionMaster.DAL.Entities.AnonymousUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AnonymousUsers");
-                });
 
             modelBuilder.Entity("SessionMaster.DAL.Entities.Session", b =>
                 {
@@ -58,21 +44,6 @@ namespace SessionMaster.DAL.Migrations
                     b.HasIndex("SessionplanId");
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("SessionMaster.DAL.Entities.SessionAnonymousUser", b =>
-                {
-                    b.Property<Guid>("SessionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AnonymousUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("SessionId", "AnonymousUserId");
-
-                    b.HasIndex("AnonymousUserId");
-
-                    b.ToTable("SessionAnonymousUser");
                 });
 
             modelBuilder.Entity("SessionMaster.DAL.Entities.SessionUser", b =>
@@ -180,25 +151,6 @@ namespace SessionMaster.DAL.Migrations
                     b.Navigation("Sessionplan");
                 });
 
-            modelBuilder.Entity("SessionMaster.DAL.Entities.SessionAnonymousUser", b =>
-                {
-                    b.HasOne("SessionMaster.DAL.Entities.AnonymousUser", "AnonymousUser")
-                        .WithMany("SessionAnonymousUsers")
-                        .HasForeignKey("AnonymousUserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.HasOne("SessionMaster.DAL.Entities.Session", "Session")
-                        .WithMany("SessionAnonymousUsers")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AnonymousUser");
-
-                    b.Navigation("Session");
-                });
-
             modelBuilder.Entity("SessionMaster.DAL.Entities.SessionUser", b =>
                 {
                     b.HasOne("SessionMaster.DAL.Entities.Session", "Session")
@@ -239,15 +191,8 @@ namespace SessionMaster.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SessionMaster.DAL.Entities.AnonymousUser", b =>
-                {
-                    b.Navigation("SessionAnonymousUsers");
-                });
-
             modelBuilder.Entity("SessionMaster.DAL.Entities.Session", b =>
                 {
-                    b.Navigation("SessionAnonymousUsers");
-
                     b.Navigation("SessionUsers");
                 });
 

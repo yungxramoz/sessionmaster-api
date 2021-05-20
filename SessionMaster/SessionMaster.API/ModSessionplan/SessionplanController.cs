@@ -137,9 +137,12 @@ namespace SessionMaster.API.ModSessionplan
         /// <param name="id">Id of the sessionplan to delete</param>
         /// <returns>Status if sessionplan has been successfully deleted</returns>
         /// <response code="200">Successfully deleted the sessionplan</response>
+        /// <response code="401">Valid JWT token needed</response>
         /// <response code="404">Sessionplan does not exist</response>
+        [Authorize]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(Guid id)
         {

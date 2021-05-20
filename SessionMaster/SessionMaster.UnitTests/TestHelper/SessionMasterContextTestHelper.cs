@@ -37,6 +37,21 @@ namespace SessionMaster.UnitTests.TestHelper
             return user;
         }
 
+        public static AnonymousUser AddAnonymousUser(this SessionMasterContext context, string name)
+        {
+            var user = new AnonymousUser
+            {
+                Id = Guid.NewGuid(),
+                Name = name
+            };
+
+            context.Add(user);
+
+            context.SaveChanges();
+
+            return user;
+        }
+
         public static Sessionplan AddSessionplan(this SessionMasterContext context, string name, Guid? userId = null)
         {
             var sessionplan = new Sessionplan
@@ -51,6 +66,51 @@ namespace SessionMaster.UnitTests.TestHelper
             context.SaveChanges();
 
             return sessionplan;
+        }
+
+        public static Session AddSession(this SessionMasterContext context, DateTime? date = null)
+        {
+            var dateNotNull = date ?? DateTime.UtcNow;
+
+            var session = new Session
+            {
+                Id = Guid.NewGuid(),
+                Date = dateNotNull
+            };
+
+            context.Add(session);
+
+            context.SaveChanges();
+
+            return session;
+        }
+
+        public static SessionUser AssignUserToSession(this SessionMasterContext context, Guid userId, Guid sessionId)
+        {
+            var sessionUser = new SessionUser
+            {
+                UserId = userId,
+                SessionId = sessionId
+            };
+
+            context.Add(sessionUser);
+            context.SaveChanges();
+
+            return sessionUser;
+        }
+
+        public static SessionAnonymousUser AssignAnonymousUserToSession(this SessionMasterContext context, Guid userId, Guid sessionId)
+        {
+            var sessionAnonymousUser = new SessionAnonymousUser
+            {
+                AnonymousUserId = userId,
+                SessionId = sessionId
+            };
+
+            context.Add(sessionAnonymousUser);
+            context.SaveChanges();
+
+            return sessionAnonymousUser;
         }
 
         #endregion Entity Test Helper

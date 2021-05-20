@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,5 +20,8 @@ namespace SessionMaster.DAL.Entities
         [Required]
         [ForeignKey("SessionplanId")]
         public Sessionplan Sessionplan { get; set; }
+
+        public ICollection<SessionUser> SessionUsers { get; set; }
+        public ICollection<SessionAnonymousUser> SessionAnonymousUsers { get; set; }
     }
 }
