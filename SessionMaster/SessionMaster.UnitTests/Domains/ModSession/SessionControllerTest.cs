@@ -92,8 +92,12 @@ namespace SessionMaster.UnitTests.Domains.ModSessionplan
                 var okObjectResult = Assert.IsType<OkObjectResult>(result);
                 var returnModel = (SessionModel)okObjectResult.Value;
                 Assert.Equal(sessionModel.Id, returnModel.Id);
+
                 Assert.Equal(anonymous.Name, returnModel.Users.First().Name);
+                Assert.Null(returnModel.Users.First().Id);
+
                 Assert.Equal($"{user.Firstname} {user.Lastname}", returnModel.Users.Last().Name);
+                Assert.Equal(user.Id, returnModel.Users.Last().Id);
             }
 
             [Fact]

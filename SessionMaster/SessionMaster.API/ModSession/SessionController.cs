@@ -178,6 +178,7 @@ namespace SessionMaster.API.ModSession
         {
             var users = session.SessionUsers.Select(s => s.User).Select(u => new SessionUserModel
             {
+                Id = u.Id,
                 Name = $"{u.Firstname} {u.Lastname}"
             }).ToList();
 
