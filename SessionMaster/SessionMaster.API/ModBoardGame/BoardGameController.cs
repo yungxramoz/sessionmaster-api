@@ -130,6 +130,47 @@ namespace SessionMaster.API.ModBoardGame
         }
 
         /// <summary>
+        /// Get the board game suggestions based on the participants collections
+        /// </summary>
+        /// <param name="id">The id of the session to get board game suggestion</param>
+        /// <returns>Playable board games</returns>
+        /// <response code="200">Successfully retrieved the board game suggestion</response>
+        /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
+        [HttpGet("~/api/sessions/{id}/boardgames")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSuggestion(Guid id)
+        {
+            try
+            {
+                var session = _unitOfWork.Sessions.GetById(id,
+                        q => q.Include(s => s.SessionAnonymousUsers).Include(s => s.SessionUsers).ThenInclude(su => su.User).ThenInclude(u => u.BoardGames));
+
+                var boardgameIds = session.SessionUsers.Select(su => su.User)
+                        .SelectMany(u => u.BoardGames, (_, boardgame) => boardgame.BoardGameId).Distinct().ToList();
+
+                if (boardgameIds.Count == 0)
+                {
+                    return Ok(new List<BoardGameModel>());
+                }
+
+                var boardGames = await _unitOfWork.BoardGames.GetAll(BoardGameAtlasFilterHelper.ByIds(boardgameIds), _appSettings.BgaClientId);
+
+                var playerCount = session.SessionUsers.Count + session.SessionAnonymousUsers.Count;
+                boardGames = boardGames.Where(bg => bg.MaxPlayers >= playerCount && bg.MinPlayers <= playerCount).ToList();
+
+                var model = _mapper.Map<IList<BoardGameModel>>(boardGames);
+
+                //don't order because response from the api is already ordered by popularity
+                return Ok(model);
+            }
+            catch (InfoException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Add a board game to a users collection
         /// </summary>
         /// <param name="id">The id of the user whose board game collection to extend</param>
