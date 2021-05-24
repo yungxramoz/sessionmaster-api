@@ -37,18 +37,22 @@ namespace SessionMaster.API.ModBoardGame
         /// Get board games filtered
         /// </summary>
         /// <param name="name">The name of the board game</param>
+        /// <param name="playerCount">The number of player that the game should support</param>
         /// <returns>Board games matching the filter</returns>
         /// <response code="200">Successfully retrieved the filtered board games</response>
         /// <response code="400">An error occured requesting the thirdparty boardgame api</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetFiltered(string name = "")
+        public async Task<IActionResult> GetFiltered(string name = "", int? playerCount = null)
         {
             try
             {
                 var nameFilter = BoardGameAtlasFilterHelper.ByName(name);
-                var boardGames = await _unitOfWork.BoardGames.GetAll(nameFilter, _appSettings.BgaClientId);
+                var minPlayerFilter = BoardGameAtlasFilterHelper.ByPlayerCount(playerCount);
+                var filter = nameFilter + minPlayerFilter;
+
+                var boardGames = await _unitOfWork.BoardGames.GetAll(filter, _appSettings.BgaClientId);
                 var model = _mapper.Map<IList<BoardGameModel>>(boardGames);
                 return Ok(model);
             }
