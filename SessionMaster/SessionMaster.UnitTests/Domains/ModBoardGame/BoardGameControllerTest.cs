@@ -284,6 +284,116 @@ namespace SessionMaster.UnitTests.Domains.ModBoardGame
             }
         }
 
+        public class GetSuggestionTest : BoardGameControllerTest
+        {
+            [Fact]
+            public async void Valid_NoParticipants_ReturnsOk200()
+            {
+                //Arrange
+                var sessionId = Guid.NewGuid();
+                var session = new Session
+                {
+                    Id = sessionId,
+                    SessionUsers = new List<SessionUser>()
+                };
+
+                _unitOfWork.Setup(uow => uow.Sessions.GetById(sessionId,
+                        It.IsAny<Func<IQueryable<Session>, IIncludableQueryable<Session, object>>>()
+                    )).Returns(session);
+
+                var sut = new BoardGameController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
+
+                //Act
+                var result = await sut.GetSuggestion(sessionId);
+
+                //Assert
+                var okObjectResult = Assert.IsType<OkObjectResult>(result);
+                var resultList = Assert.IsType<List<BoardGameModel>>(okObjectResult.Value);
+                Assert.Empty(resultList);
+            }
+
+            [Fact]
+            public async void Valid__ReturnsOk200()
+            {
+                //Arrange
+                var sessionId = Guid.NewGuid();
+                var session = new Session
+                {
+                    Id = sessionId,
+                    SessionUsers = new List<SessionUser>
+                    {
+                        new SessionUser
+                        {
+                            User = new User
+                            {
+                                BoardGames = new List<UserBoardGame>
+                                {
+                                    new UserBoardGame
+                                    {
+                                        BoardGameId = RandomStringTestHelper.Generate()
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    SessionAnonymousUsers = new List<SessionAnonymousUser>
+                    {
+                        new SessionAnonymousUser
+                        {
+                            AnonymousUser = new AnonymousUser()
+                        }
+                    }
+                };
+                var boardgame = new BoardGameAtlasGameDetails
+                {
+                    Id = "Returned",
+                    Name = "First",
+                    MinPlayers = 1,
+                    MaxPlayers = 3
+                };
+                var bgaDetails = new List<BoardGameAtlasGameDetails>
+                {
+                    boardgame,
+                    new BoardGameAtlasGameDetails
+                    {
+                        MinPlayers = 3,
+                        MaxPlayers = 4
+                    }
+                };
+                var boardGameList = new List<BoardGameModel>
+                {
+                    new BoardGameModel
+                    {
+                        Id = boardgame.Id,
+                        Name = boardgame.Name,
+                        MinPlayers = boardgame.MinPlayers,
+                        MaxPlayers = boardgame.MaxPlayers
+                    },
+                };
+
+                _unitOfWork.Setup(uow => uow.Sessions.GetById(sessionId,
+                        It.IsAny<Func<IQueryable<Session>, IIncludableQueryable<Session, object>>>()
+                    )).Returns(session);
+                _unitOfWork.Setup(uow => uow.BoardGames.GetAll(It.IsAny<string>(), _clientId)).ReturnsAsync(bgaDetails);
+                _mapper.Setup(m => m.Map<IList<BoardGameModel>>(It.Is<List<BoardGameAtlasGameDetails>>(s => s.Count == 1 && s.Contains(boardgame))))
+                    .Returns(boardGameList);
+
+                var sut = new BoardGameController(_unitOfWork.Object, _mapper.Object, _appSettings.Object);
+
+                //Act
+                var result = await sut.GetSuggestion(sessionId);
+
+                //Assert
+                var okObjectResult = Assert.IsType<OkObjectResult>(result);
+                var resultList = Assert.IsType<List<BoardGameModel>>(okObjectResult.Value);
+                var resultModel = Assert.Single(resultList);
+                Assert.Equal(boardgame.Id, resultModel.Id);
+                Assert.Equal(boardgame.Name, resultModel.Name);
+                Assert.Equal(boardgame.MinPlayers, resultModel.MinPlayers);
+                Assert.Equal(boardgame.MaxPlayers, resultModel.MaxPlayers);
+            }
+        }
+
         public class PostToCollectionTest : BoardGameControllerTest
         {
             [Fact]

@@ -4,9 +4,25 @@ namespace SessionMaster.Common.Helpers
 {
     public static class BoardGameAtlasFilterHelper
     {
-        public static string ByMaxPlayer(string maxPlayer)
+        public static string ByMaxPlayer(int? maxPlayer)
         {
-            return $"&max_player={maxPlayer}";
+            return maxPlayer != null ? $"&max_player={maxPlayer}" : "";
+        }
+
+        public static string ByMinPlayer(int? minPlayer)
+        {
+            return minPlayer != null ? $"&min_player={minPlayer}" : "";
+        }
+
+        public static string ByPlayerCount(int? playerCount)
+        {
+            if (playerCount != null)
+            {
+                var greaterThenMin = playerCount - 1;
+                var lesserThenMax = playerCount + 1;
+                return $"&gt_min_players={greaterThenMin}&lt_max_players={lesserThenMax}";
+            }
+            return "";
         }
 
         public static string ByName(string name)
