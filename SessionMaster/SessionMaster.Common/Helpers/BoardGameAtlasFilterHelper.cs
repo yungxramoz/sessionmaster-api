@@ -18,9 +18,9 @@ namespace SessionMaster.Common.Helpers
         {
             if (playerCount != null)
             {
-                var greaterThenMin = playerCount - 1;
-                var lesserThenMax = playerCount + 1;
-                return $"&gt_min_players={greaterThenMin}&lt_max_players={lesserThenMax}";
+                var max = playerCount - 1;
+                var min = playerCount + 1;
+                return $"&lt_min_players={min}&gt_max_players={max}";
             }
             return "";
         }
