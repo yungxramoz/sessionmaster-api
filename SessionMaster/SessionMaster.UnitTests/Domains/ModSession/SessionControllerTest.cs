@@ -16,7 +16,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace SessionMaster.UnitTests.Domains.ModSessionplan
+namespace SessionMaster.UnitTests.Domains.ModSession
 {
     public class SessionControllerTest
     {
