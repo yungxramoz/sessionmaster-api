@@ -172,8 +172,39 @@ namespace SessionMaster.UnitTests.Domains.ModUser
             }
         }
 
-        public class FindTest : UserRepositoryTest
+        public class GetTest : UserRepositoryTest
         {
+            [Fact]
+            public void HasUsers_ReturnsUserList()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+                var sut = new UserRepository(context);
+                var user1 = context.AddUser("Julius", "Testimus", "tester", "test");
+                var user2 = context.AddUser("Markus", "Testimus", "tester2", "test2");
+
+                //Act
+                var result = sut.Get();
+
+                //Assert
+                Assert.Contains(user1, result);
+                Assert.Contains(user2, result);
+            }
+
+            [Fact]
+            public void NoUsers_ReturnsUserList()
+            {
+                //Arrange
+                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
+                var sut = new UserRepository(context);
+
+                //Act
+                var result = sut.Get();
+
+                //Assert
+                Assert.Empty(result);
+            }
+
             [Fact]
             public void ByFirstname_ReturnsUser()
             {
@@ -219,40 +250,6 @@ namespace SessionMaster.UnitTests.Domains.ModUser
                 //Assert
                 Assert.Contains(user1, result);
                 Assert.Contains(user2, result);
-            }
-        }
-
-        public class GetAllTest : UserRepositoryTest
-        {
-            [Fact]
-            public void HasUsers_ReturnsUserList()
-            {
-                //Arrange
-                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
-                var sut = new UserRepository(context);
-                var user1 = context.AddUser("Julius", "Testimus", "tester", "test");
-                var user2 = context.AddUser("Markus", "Testimus", "tester2", "test2");
-
-                //Act
-                var result = sut.Get();
-
-                //Assert
-                Assert.Contains(user1, result);
-                Assert.Contains(user2, result);
-            }
-
-            [Fact]
-            public void NoUsers_ReturnsUserList()
-            {
-                //Arrange
-                var context = new SessionMasterContext(SessionMasterContextTestHelper.ContextOptions());
-                var sut = new UserRepository(context);
-
-                //Act
-                var result = sut.Get();
-
-                //Assert
-                Assert.Empty(result);
             }
         }
 
